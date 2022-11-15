@@ -1,4 +1,4 @@
-namespace gena
+namespace Gena
 {
     internal static class Program
     {

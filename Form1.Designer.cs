@@ -1,4 +1,4 @@
-﻿namespace gena
+﻿namespace Gena
 {
     partial class Gena
     {
@@ -30,8 +30,8 @@
         {
             this.btnChooseExcelFile = new System.Windows.Forms.Button();
             this.btnStartGeneration = new System.Windows.Forms.Button();
-            this.DS = new System.Windows.Forms.RadioButton();
-            this.DSO = new System.Windows.Forms.RadioButton();
+            this.radioButton_DS = new System.Windows.Forms.RadioButton();
+            this.radioButton_DSO = new System.Windows.Forms.RadioButton();
             this.richTextBox_Logs = new System.Windows.Forms.RichTextBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.label1 = new System.Windows.Forms.Label();
@@ -57,29 +57,29 @@
             this.btnStartGeneration.UseVisualStyleBackColor = true;
             this.btnStartGeneration.Click += new System.EventHandler(this.btnStartGeneration_Click);
             // 
-            // DS
+            // radioButton_DS
             // 
-            this.DS.AutoSize = true;
-            this.DS.Location = new System.Drawing.Point(12, 58);
-            this.DS.Name = "DS";
-            this.DS.Size = new System.Drawing.Size(64, 34);
-            this.DS.TabIndex = 2;
-            this.DS.TabStop = true;
-            this.DS.Text = "DS";
-            this.DS.UseVisualStyleBackColor = true;
-            this.DS.CheckedChanged += new System.EventHandler(this.DS_CheckedChanged);
+            this.radioButton_DS.AutoSize = true;
+            this.radioButton_DS.Location = new System.Drawing.Point(12, 58);
+            this.radioButton_DS.Name = "radioButton_DS";
+            this.radioButton_DS.Size = new System.Drawing.Size(64, 34);
+            this.radioButton_DS.TabIndex = 2;
+            this.radioButton_DS.TabStop = true;
+            this.radioButton_DS.Text = "DS";
+            this.radioButton_DS.UseVisualStyleBackColor = true;
+            this.radioButton_DS.CheckedChanged += new System.EventHandler(this.radioButton_DS_CheckedChanged);
             // 
-            // DSO
+            // radioButton_DSO
             // 
-            this.DSO.AutoSize = true;
-            this.DSO.Location = new System.Drawing.Point(12, 98);
-            this.DSO.Name = "DSO";
-            this.DSO.Size = new System.Drawing.Size(80, 34);
-            this.DSO.TabIndex = 3;
-            this.DSO.TabStop = true;
-            this.DSO.Text = "DSO";
-            this.DSO.UseVisualStyleBackColor = true;
-            this.DSO.CheckedChanged += new System.EventHandler(this.DSO_CheckedChanged);
+            this.radioButton_DSO.AutoSize = true;
+            this.radioButton_DSO.Location = new System.Drawing.Point(12, 98);
+            this.radioButton_DSO.Name = "radioButton_DSO";
+            this.radioButton_DSO.Size = new System.Drawing.Size(80, 34);
+            this.radioButton_DSO.TabIndex = 3;
+            this.radioButton_DSO.TabStop = true;
+            this.radioButton_DSO.Text = "DSO";
+            this.radioButton_DSO.UseVisualStyleBackColor = true;
+            this.radioButton_DSO.CheckedChanged += new System.EventHandler(this.radioButton_DSO_CheckedChanged);
             // 
             // richTextBox_Logs
             // 
@@ -113,8 +113,8 @@
             this.ClientSize = new System.Drawing.Size(1087, 728);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.richTextBox_Logs);
-            this.Controls.Add(this.DSO);
-            this.Controls.Add(this.DS);
+            this.Controls.Add(this.radioButton_DSO);
+            this.Controls.Add(this.radioButton_DS);
             this.Controls.Add(this.btnStartGeneration);
             this.Controls.Add(this.btnChooseExcelFile);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
@@ -131,8 +131,8 @@
 
         private Button btnChooseExcelFile;
         private Button btnStartGeneration;
-        private RadioButton DS;
-        private RadioButton DSO;
+        private RadioButton radioButton_DS;
+        private RadioButton radioButton_DSO;
         private RichTextBox richTextBox_Logs;
         private OpenFileDialog openFileDialog1;
         private Label label1;
