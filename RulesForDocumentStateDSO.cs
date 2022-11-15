@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Gena
 {
-    internal class RulesForDocumentState
+    internal class RulesForDocumentStateDSO
     {
         //метод обновления существующего StateSettings
-        public static T CreateRulesForDocumentState<T>( IXLWorksheet worksheet, string columnLetter, string tempStateName, int currentStateID, List<InternalNames> INs, T lcForCurrentState, List<SheetUserInFields> userInFieldSheets, List<SheetGroups> GroupsSheetList) where T : DocumentState, new()
+        public static T CreateRulesForDocumentStateDSO<T>( IXLWorksheet worksheet, string columnLetter, string tempStateName, int currentStateID, List<InternalNames> INs, T lcForCurrentState, List<SheetUserInFields> userInFieldSheets, List<SheetGroups> GroupsSheetList) where T : DocumentStateDSO, new()
         {
             if (lcForCurrentState == null)
             {
@@ -77,7 +77,7 @@ namespace Gena
                             field = fieldInCell.Trim(),
                             fieldName = userInFieldSheets.Where(e => e.FieldName == fieldInCell.Trim()).First().InternalName,
                             priority = priorityValue,
-                            fieldSettings = RulesForUserInField.GenerateRulesForUserInField(worksheet, columnLetter, INs, fieldInCell.Trim())
+                            fieldSettings = RulesForUserInFieldDSO.GenerateRulesForUserInFieldDSO(worksheet, columnLetter, INs, fieldInCell.Trim())
                         });
                     }
                 }
@@ -88,7 +88,7 @@ namespace Gena
                         field = userInFieldCellValue,
                         fieldName = userInFieldSheets.Where(e => e.FieldName == userInFieldCellValue).First().InternalName,
                         priority = priorityValue,
-                        fieldSettings = RulesForUserInField.GenerateRulesForUserInField(worksheet, columnLetter, INs, userInFieldCellValue)
+                        fieldSettings = RulesForUserInFieldDSO.GenerateRulesForUserInFieldDSO(worksheet, columnLetter, INs, userInFieldCellValue)
                     });
                 }
             }
@@ -96,7 +96,7 @@ namespace Gena
             //если в одной из ячеек указано ключевое слово Default/По умолчанию, то вызываем генерацию правил для дефолта
             if (userInGroupCellValue == "По умолчанию" || userInFieldCellValue == "По умолчанию" || userInGroupCellValue == "Default" || userInFieldCellValue == "Default")
             {
-                lcForCurrentState.stateSettings[0].fieldSettingsByState = RulesForDefault.GenerateRulesForDefault(worksheet, columnLetter, INs);
+                lcForCurrentState.stateSettings[0].fieldSettingsByState = RulesForDefaultDSO.GenerateRulesForDefaultDSO(worksheet, columnLetter, INs);
             }
 
             return lcForCurrentState;

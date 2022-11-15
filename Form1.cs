@@ -55,24 +55,37 @@ namespace Gena
                 DirectoryInfo directoryInfo = new DirectoryInfo(openFileDialog1.FileName);
                 var fileExtension = Path.GetExtension(openFileDialog1.FileName);
                 var fileName = Path.GetFileName(openFileDialog1.FileName);
+                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(openFileDialog1.FileName);
                 var parentFolder = directoryInfo.Parent;
 
                 if(systemType != null)
                 {
                     if (systemType == "DS")
                     {
-                        Directory.CreateDirectory(parentFolder + "\\xmlFiles\\");
+                        var pathToFolderWithXMLFiles = parentFolder + "\\" + fileNameWithoutExtension;
+                        Directory.CreateDirectory(pathToFolderWithXMLFiles);
                         richTextBox_Logs.AppendText("\r\n");
-                        richTextBox_Logs.AppendText(@"Создана папка " + "xmlFiles");
+                        richTextBox_Logs.AppendText(@"Создана папка " + fileName);
 
+                        if (LifeCycleGenerator.GenerateLifeCycle(openFileDialog1.FileName, pathToFolderWithXMLFiles, systemType))
+                        {
+                            richTextBox_Logs.AppendText("\r\n");
+                            richTextBox_Logs.AppendText(@"Жц сгенерирован успешно");
+                        }
+                        else
+                        {
+                            richTextBox_Logs.AppendText("\r\n");
+                            richTextBox_Logs.AppendText(@"Что-то пошло не так");
+                        }
                     }
                     else if (systemType == "DSO")
                     {
-                        var pathToFolderWithJSONFiles = parentFolder + "\\jsonFiles\\";
+                        var pathToFolderWithJSONFiles = parentFolder + "\\" +fileNameWithoutExtension;
                         Directory.CreateDirectory(pathToFolderWithJSONFiles);
                         richTextBox_Logs.AppendText("\r\n");
-                        richTextBox_Logs.AppendText(@"Создана папка " + "jsonFiles");
-                        if(LifeCycleGenerator.GenerateLifeCycle(openFileDialog1.FileName, pathToFolderWithJSONFiles))
+                        richTextBox_Logs.AppendText(@"Создана папка " + fileName);
+
+                        if(LifeCycleGenerator.GenerateLifeCycle(openFileDialog1.FileName, pathToFolderWithJSONFiles, systemType))
                         {
                             richTextBox_Logs.AppendText("\r\n");
                             richTextBox_Logs.AppendText(@"Жц сгенерирован успешно");

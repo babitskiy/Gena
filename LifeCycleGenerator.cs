@@ -12,7 +12,7 @@ namespace Gena
 {
     internal class LifeCycleGenerator
     {
-        public static bool GenerateLifeCycle(string excelFilePath, string pathToFolderWithJSONFiles)
+        public static bool GenerateLifeCycle(string excelFilePath, string pathToFolderWithLCFiles, string systemType)
         {
             //открываем эксель-файл
             using (IXLWorkbook workbook = new XLWorkbook(excelFilePath))
@@ -23,19 +23,37 @@ namespace Gena
                 //генерируем список всех групп из таблицы UserInFields
                 var UserInFieldsSheetList = SheetUserInFields.GenerateUserInFieldSheetList(workbook);
 
-                //генерируем список всех групп из таблицы Groups
-                var GroupsSheetList = SheetGroups.GenerateGroupSheetList(workbook);
-
                 //генерируем список всех настроек из таблицы Settings
                 var SettingsSheetList = SheetSettings.GenerateSheetSettingsList(workbook);
                 var SystemWorksheets = SettingsSheetList.Where(e => e?.Name?.Trim() == "SystemWorksheets").FirstOrDefault()?.Rule?.Split(';', StringSplitOptions.TrimEntries);
 
-                foreach (var worksheet in workbook.Worksheets)
+
+                if(systemType == "DSO")
                 {
-                    if(!(SystemWorksheets != null && SystemWorksheets.Any(e => e == worksheet.Name)) && worksheet.Name != "States" && worksheet.Name != "Groups" && worksheet.Name != "Fields" && worksheet.Name != "UserInFields")
+                    //генерируем список всех групп из таблицы Groups
+                    var GroupsSheetList = SheetGroups.GenerateGroupSheetList(workbook);
+
+                    foreach (var worksheet in workbook.Worksheets)
                     {
-                        var lc = SheetWithRules.GenerateLifeCycleForSheetWithRules<List<DocumentState>>(worksheet, StatesSheetList, UserInFieldsSheetList, GroupsSheetList);
-                        DSOSerializer.StartDSOSerializer(pathToFolderWithJSONFiles + "\\" + worksheet.Name, lc);
+                        if (!(SystemWorksheets != null && SystemWorksheets.Any(e => e == worksheet.Name)) && worksheet.Name != "States" && worksheet.Name != "Groups" && worksheet.Name != "Fields" && worksheet.Name != "UserInFields")
+                        {
+                            var lc = SheetWithRulesDSO.GenerateLifeCycleForSheetWithRulesDSO<List<DocumentStateDSO>>(worksheet, StatesSheetList, UserInFieldsSheetList, GroupsSheetList);
+                            DSOSerializer.StartDSOSerializer(pathToFolderWithLCFiles + "\\" + worksheet.Name, lc);
+                        }
+                    }
+                }
+                else if(systemType == "DS")
+                {
+                    //генерируем список всех Ролей из таблицы UserInRoles
+                    var UserInRolesSheetList = SheetUserInRoles.GenerateUserInRolesSheetList(workbook);
+
+                    foreach (var worksheet in workbook.Worksheets)
+                    {
+                        if (!(SystemWorksheets != null && SystemWorksheets.Any(e => e == worksheet.Name)) && worksheet.Name != "States" && worksheet.Name != "UserInRoles" && worksheet.Name != "Fields" && worksheet.Name != "UserInFields" && worksheet.Name != "Settings")
+                        {
+                            var lc = SheetWithRulesDS.GenerateLifeCycleForSheetWithRulesDS<StatesConfiguration>(worksheet, StatesSheetList, UserInFieldsSheetList, UserInRolesSheetList);
+                            DSSerializer.StartDSSerializer(pathToFolderWithLCFiles + "\\" + worksheet.Name, lc);
+                        }
                     }
                 }
             }

@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Gena
 {
-    internal class RulesForUserInField
+    internal class RulesForDefaultDSO
     {
-        //метод генерации правил для UserInGroup
-        public static List<FieldSettingForUserInField> GenerateRulesForUserInField(IXLWorksheet worksheet, string columnLetter, List<InternalNames> INs, string userInRolePointer)
+        //метод генерации Default для DocumentState
+        public static List<FieldSettingsByState> GenerateRulesForDefaultDSO(IXLWorksheet worksheet, string columnLetter, List<InternalNames> INs)
         {
-            //создаём экземпляр правил для пользователя в группе
-            var rulesForUserInRoles = new List<FieldSettingForUserInField>();
+            //создаём экземпляр дефолта
+            var rulesForDefault = new List<FieldSettingsByState>();
 
             string currentTypeOfObject = "Поля";
 
@@ -48,7 +48,7 @@ namespace Gena
                     switch (currentTypeOfObject)
                     {
                         case "Поля":
-                            rulesForUserInRoles.Add(new FieldSettingForUserInField(currentInternalName.InternalName, valueInCell));
+                            rulesForDefault.Add(new FieldSettingsByState(currentInternalName.InternalName, valueInCell));
                             break;
 
                         case "Кнопки":
@@ -64,7 +64,7 @@ namespace Gena
                     }
                 }
             }
-            return rulesForUserInRoles;
+            return rulesForDefault;
         }
     }
 }

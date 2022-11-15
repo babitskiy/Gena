@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Gena
 {
-    internal class SheetWithRules
+    internal class SheetWithRulesDSO
     {
-        public static T GenerateLifeCycleForSheetWithRules<T>(IXLWorksheet worksheet, List<SheetStates> StatesSheetList, List<SheetUserInFields> UserInFieldsSheetList, List<SheetGroups> GroupsSheetList) where T : List<DocumentState>, new()
+        public static T GenerateLifeCycleForSheetWithRulesDSO<T>(IXLWorksheet worksheet, List<SheetStates> StatesSheetList, List<SheetUserInFields> UserInFieldsSheetList, List<SheetGroups> GroupsSheetList) where T : List<DocumentStateDSO>, new()
         {
             //генерируем список всех intrnalName'ов в таблице с описанием жц
             var INs = InternalNames.GenerateInternalNamesSheetList(worksheet);
@@ -28,19 +28,19 @@ namespace Gena
                 int currentStateID = Convert.ToInt32(StatesSheetList.Where(e => e.StateName == columnWithRules.StateName).First().StateId);
 
                 //объявляем переменную DocumentState
-                var lcForCurrentState = new DocumentState();
+                var lcForCurrentState = new DocumentStateDSO();
 
                 //проверяем есть ли уже объект DocumentState с таким состоянием
                 if (lc.Any(e => e.docState == currentStateID))
                 {
                     //добавляем новые правила в существующий DocumentState
                     lcForCurrentState = lc.SingleOrDefault(e => e.docState == currentStateID);
-                    lcForCurrentState = RulesForDocumentState.CreateRulesForDocumentState<DocumentState>(worksheet, columnWithRules.Address.ColumnLetter, columnWithRules.StateName, currentStateID, INs, lcForCurrentState, UserInFieldsSheetList, GroupsSheetList);
+                    lcForCurrentState = RulesForDocumentStateDSO.CreateRulesForDocumentStateDSO<DocumentStateDSO>(worksheet, columnWithRules.Address.ColumnLetter, columnWithRules.StateName, currentStateID, INs, lcForCurrentState, UserInFieldsSheetList, GroupsSheetList);
                 }
                 else
                 {
                     //создаём DocumentState и добавляем его в общий жц
-                    lcForCurrentState = RulesForDocumentState.CreateRulesForDocumentState<DocumentState>(worksheet, columnWithRules.Address.ColumnLetter, columnWithRules.StateName, currentStateID, INs, null, UserInFieldsSheetList, GroupsSheetList);
+                    lcForCurrentState = RulesForDocumentStateDSO.CreateRulesForDocumentStateDSO<DocumentStateDSO>(worksheet, columnWithRules.Address.ColumnLetter, columnWithRules.StateName, currentStateID, INs, null, UserInFieldsSheetList, GroupsSheetList);
                     lc.Add(lcForCurrentState);
                 }
             }

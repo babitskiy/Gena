@@ -10,7 +10,7 @@ namespace Gena
 {
     internal class DSOSerializer
     {
-        public static void StartDSOSerializer(string pathToFile, List<DocumentState> lc)
+        public static void StartDSOSerializer(string pathToFile, List<DocumentStateDSO> lc)
         {
             //данные настройки Json сериализатора нужны чтобы русские слова выводились корректно, а не в юникоде
             JsonSerializerOptions options = new JsonSerializerOptions

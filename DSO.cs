@@ -2,7 +2,7 @@
 using DocumentFormat.OpenXml.Wordprocessing;
 using System.Xml.Linq;
 
-public class DocumentState
+public class DocumentStateDSO
 {
     public int docState { get; set; }
     public string stateName { get; set; }
