@@ -14,6 +14,12 @@ namespace Gena
             InitializeComponent();
         }
 
+        public void addLog(string log) 
+        {
+            richTextBox_Logs.AppendText("\r\n");
+            richTextBox_Logs.AppendText(log);
+        }
+
         private void btnChooseExcelFile_Click(object sender, EventArgs e)
         {
             //Открытие окна и проверка, выбран ли файл

@@ -35,7 +35,8 @@ namespace Gena
 
                     foreach (var worksheet in workbook.Worksheets)
                     {
-                        if (!(SystemWorksheets != null && SystemWorksheets.Any(e => e == worksheet.Name)) && worksheet.Name != "States" && worksheet.Name != "Groups" && worksheet.Name != "Fields" && worksheet.Name != "UserInFields")
+                        //отбрасываем системные листы экселя
+                        if (!(SystemWorksheets != null && SystemWorksheets.Any(e => e == worksheet.Name)) && worksheet.Name != "States" && worksheet.Name != "Groups" && worksheet.Name != "Fields" && worksheet.Name != "UserInFields" && worksheet.Name != "Settings")
                         {
                             var lc = SheetWithRulesDSO.GenerateLifeCycleForSheetWithRulesDSO<List<DocumentStateDSO>>(worksheet, StatesSheetList, UserInFieldsSheetList, GroupsSheetList);
                             DSOSerializer.StartDSOSerializer(pathToFolderWithLCFiles + "\\" + worksheet.Name, lc);
@@ -49,6 +50,7 @@ namespace Gena
 
                     foreach (var worksheet in workbook.Worksheets)
                     {
+                        //отбрасываем системные листы экселя
                         if (!(SystemWorksheets != null && SystemWorksheets.Any(e => e == worksheet.Name)) && worksheet.Name != "States" && worksheet.Name != "UserInRoles" && worksheet.Name != "Fields" && worksheet.Name != "UserInFields" && worksheet.Name != "Settings")
                         {
                             var lc = SheetWithRulesDS.GenerateLifeCycleForSheetWithRulesDS<StatesConfiguration>(worksheet, StatesSheetList, UserInFieldsSheetList, UserInRolesSheetList);
