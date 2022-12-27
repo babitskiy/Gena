@@ -73,15 +73,29 @@ namespace Gena
                         richTextBox_Logs.AppendText("\r\n");
                         richTextBox_Logs.AppendText(@"Создана папка " + fileName);
 
-                        if (LifeCycleGenerator.GenerateLifeCycle(openFileDialog1.FileName, pathToFolderWithXMLFiles, systemType))
+                        try
                         {
-                            richTextBox_Logs.AppendText("\r\n");
-                            richTextBox_Logs.AppendText(@"Жц сгенерирован успешно");
+                            if (LifeCycleGenerator.GenerateLifeCycle(openFileDialog1.FileName, pathToFolderWithXMLFiles, systemType))
+                            {
+                                richTextBox_Logs.AppendText("\r\n");
+                                richTextBox_Logs.AppendText(@"Жц сгенерирован успешно");
+                            }
+                            else
+                            {
+                                richTextBox_Logs.AppendText("\r\n");
+                                richTextBox_Logs.AppendText(@"Что-то пошло не так");
+                            }
                         }
-                        else
+                        catch (FieldAccessException ex)
                         {
                             richTextBox_Logs.AppendText("\r\n");
-                            richTextBox_Logs.AppendText(@"Что-то пошло не так");
+                            richTextBox_Logs.AppendText(ex.Message);
+                            return;
+                        }
+                        catch (Exception)
+                        {
+
+                            throw;
                         }
                     }
                     else if (systemType == "DSO")
@@ -91,15 +105,29 @@ namespace Gena
                         richTextBox_Logs.AppendText("\r\n");
                         richTextBox_Logs.AppendText(@"Создана папка " + fileName);
 
-                        if(LifeCycleGenerator.GenerateLifeCycle(openFileDialog1.FileName, pathToFolderWithJSONFiles, systemType))
+                        try
                         {
-                            richTextBox_Logs.AppendText("\r\n");
-                            richTextBox_Logs.AppendText(@"Жц сгенерирован успешно");
+                            if (LifeCycleGenerator.GenerateLifeCycle(openFileDialog1.FileName, pathToFolderWithJSONFiles, systemType))
+                            {
+                                richTextBox_Logs.AppendText("\r\n");
+                                richTextBox_Logs.AppendText(@"Жц сгенерирован успешно");
+                            }
+                            else
+                            {
+                                richTextBox_Logs.AppendText("\r\n");
+                                richTextBox_Logs.AppendText(@"Что-то пошло не так");
+                            }
                         }
-                        else
+                        catch (FieldAccessException ex)
                         {
                             richTextBox_Logs.AppendText("\r\n");
-                            richTextBox_Logs.AppendText(@"Что-то пошло не так");
+                            richTextBox_Logs.AppendText(ex.Message);
+                            return;
+                        }
+                        catch (Exception)
+                        {
+
+                            throw;
                         }
                     }
                 }
