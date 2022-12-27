@@ -1,59 +1,34 @@
-﻿using DocumentFormat.OpenXml.Bibliography;
-using DocumentFormat.OpenXml.Vml.Spreadsheet;
-using DocumentFormat.OpenXml.Wordprocessing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Xml.Serialization;
+
 
 namespace Gena
 {
     // NOTE: Generated code may require at least .NET Framework 4.5 or .NET Core/Standard 2.0.
 
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://schemas.conteq.ru/sharepoint/v4/configuration/states")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.conteq.ru/sharepoint/v4/configuration/states", IsNullable = false)]
+    [XmlType(AnonymousType = true, Namespace = "http://schemas.conteq.ru/sharepoint/v4/configuration/states")]
+    [XmlRoot(Namespace = "http://schemas.conteq.ru/sharepoint/v4/configuration/states", IsNullable = false)]
     public class StatesConfiguration
     {
-        [System.Xml.Serialization.XmlArrayItemAttribute("DocumentState", IsNullable = false)]
+        [XmlArrayItem("DocumentState", IsNullable = false)]
         public List<DocumentState> DocumentStates { get; set; }
     }
 
 
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://schemas.conteq.ru/sharepoint/v4/configuration/states")]
+    [XmlType(AnonymousType = true, Namespace = "http://schemas.conteq.ru/sharepoint/v4/configuration/states")]
     public class DocumentState
     {
-        private object preActionsField;
-
-        private Switch switchField;
-
-        private int idField;
-
-        private string nameField;
-
-        public object PreActions { get; set; }
-
         public Switch Switch { get; set; }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute]
         public int ID { get; set; }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute]
         public string Name { get; set; }
     }
 
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://schemas.conteq.ru/sharepoint/v4/configuration/states")]
+    [XmlType(AnonymousType = true, Namespace = "http://schemas.conteq.ru/sharepoint/v4/configuration/states")]
     public class Switch
     {
-        private List<Case> caseField;
-
-        private Default defaultField;
 
         [System.Xml.Serialization.XmlElementAttribute("Case")]
         public List<Case> Case { get; set; }
@@ -61,39 +36,22 @@ namespace Gena
         public Default Default { get; set; }
     }
 
-
-    [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://schemas.conteq.ru/sharepoint/v4/configuration/states")]
     public class Case
     {
-
-        private List<CaseSetField> setFieldField;
-
-        private List<CaseSetAction> setActionField;
-
-        private List<CaseSetTab> setTabField;
-
-        private CaseSetForm setFormField;
-
-        private string userInRolesField;
-
-        private string userInFieldsField;
-
-
-        [System.Xml.Serialization.XmlElementAttribute("SetField")]
+        [XmlElement("SetField")]
         public List<CaseSetField> SetField { get; set; }
 
 
-        [System.Xml.Serialization.XmlElementAttribute("SetAction")]
+        [XmlElement("SetAction")]
         public List<CaseSetAction> SetAction { get; set; }
 
 
-        [System.Xml.Serialization.XmlElementAttribute("SetTab")]
+        [XmlElement("SetTab")]
         public List<CaseSetTab> SetTab { get; set; }
 
         public CaseSetForm SetForm { get; set; }
-
 
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string UserInRoles { get; set; }

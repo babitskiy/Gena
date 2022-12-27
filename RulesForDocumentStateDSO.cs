@@ -75,10 +75,6 @@ namespace Gena
                     foreach (var fieldInCell in fieldsInCell)
                     {
                         var fName = userInFieldSheets.Where(e => e.FieldName == fieldInCell.Trim()).First().InternalName;
-                        if (fName is null)
-                        {
-                            throw new FieldNotFoundException($"Поле {fieldInCell.Trim()} не найдено");
-                        }
                         lcForCurrentState.stateSettings[0].userInField.Add(new UserInField
                         {
                             field = fieldInCell.Trim(),

@@ -118,7 +118,7 @@ namespace Gena
                                 richTextBox_Logs.AppendText(@"Что-то пошло не так");
                             }
                         }
-                        catch (FieldAccessException ex)
+                        catch (FieldNotFoundException ex)
                         {
                             richTextBox_Logs.AppendText("\r\n");
                             richTextBox_Logs.AppendText(ex.Message);
