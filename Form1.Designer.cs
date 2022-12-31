@@ -142,6 +142,6 @@
         private RadioButton radioButton_DSO;
         private OpenFileDialog openFileDialog1;
         private Label label1;
-        public RichTextBox richTextBox_Logs;
+        private RichTextBox richTextBox_Logs;
     }
 }
