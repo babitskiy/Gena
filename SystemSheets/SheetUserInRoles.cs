@@ -18,7 +18,8 @@ namespace Gena
         public static List<SheetUserInRoles> GenerateUserInRolesSheetList(IXLWorkbook workbook)
         {
             //создаём список полей из листа Groups
-            var worksheetUserInRoles = workbook.Worksheets.Where(w => w.Name == "UserInRoles").First();
+            var worksheetUserInRoles = workbook.Worksheets.Where(w => w.Name == "UserInRoles")?.FirstOrDefault();
+            if (worksheetUserInRoles is null) throw new UniversalException($"Системный список UserInRoles не найден");
             var GroupsList = worksheetUserInRoles.RowsUsed().Skip(1).Select(row => new
             {
                 RoleInternalName = row.Cell(1).Value,

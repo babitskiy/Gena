@@ -1,6 +1,7 @@
 ﻿using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,7 +51,8 @@ namespace Gena
                         {
                             lcForCurrentState.Switch.Case = new List<Case>();
                         }
-                        var userInRoleInternalName = userInRoleSheetList.Where(e => e.RoleName.ToUpper() == groupInCell.Trim().ToUpper()).First().RoleInternalName;
+                        var userInRoleInternalName = userInRoleSheetList.Where(e => e.RoleName.ToUpper() == groupInCell.Trim().ToUpper())?.FirstOrDefault()?.RoleInternalName;
+                        if (userInRoleInternalName is null) throw new UniversalException($"Роль \"{groupInCell.Trim()}\" не найдена в списке UserInRole (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}3\")");
                         lcForCurrentState.Switch.Case.Add(RulesForUserInRole.GenerateRulesForUserInRoles(worksheet, columnLetter, INs, userInRoleInternalName.Trim()));
                     }
                 }
@@ -60,7 +62,8 @@ namespace Gena
                     {
                         lcForCurrentState.Switch.Case = new List<Case>();
                     }
-                    var userInRoleInternalName = userInRoleSheetList.Where(e => e.RoleName.ToUpper() == userInRoleCellValue.Trim().ToUpper()).First().RoleInternalName;
+                    var userInRoleInternalName = userInRoleSheetList.Where(e => e.RoleName.ToUpper() == userInRoleCellValue.Trim().ToUpper())?.FirstOrDefault()?.RoleInternalName;
+                    if (userInRoleInternalName is null) throw new UniversalException($"Роль \"{userInRoleCellValue.Trim()}\" не найдена в списке UserInRole (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}3\")");
                     lcForCurrentState.Switch.Case.Add(RulesForUserInRole.GenerateRulesForUserInRoles(worksheet, columnLetter, INs, userInRoleInternalName));
                 }
             }
@@ -77,7 +80,8 @@ namespace Gena
                         {
                             lcForCurrentState.Switch.Case = new List<Case>();
                         }
-                        var userInFieldInternalName = userInFieldSheetList.Where(e => e.FieldName.ToUpper() == fieldInCell.Trim().ToUpper()).First().InternalName;
+                        var userInFieldInternalName = userInFieldSheetList.Where(e => e.FieldName.ToUpper() == fieldInCell.Trim().ToUpper())?.FirstOrDefault()?.InternalName;
+                        if (userInFieldInternalName is null) throw new UniversalException($"Поле {fieldInCell.Trim()} не найдено в списке UserInFields (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}4\")");
                         lcForCurrentState.Switch.Case.Add(RulesForUserInFieldDS.GenerateRulesForUserInFieldDS(worksheet, columnLetter, INs, userInFieldInternalName));
                     }
                 }
@@ -87,7 +91,8 @@ namespace Gena
                     {
                         lcForCurrentState.Switch.Case = new List<Case>();
                     }
-                    var userInFieldInternalName = userInFieldSheetList.Where(e => e.FieldName.ToUpper() == userInFieldCellValue.Trim().ToUpper()).First().InternalName;
+                    var userInFieldInternalName = userInFieldSheetList.Where(e => e.FieldName.ToUpper() == userInFieldCellValue.Trim().ToUpper())?.FirstOrDefault()?.InternalName;
+                    if (userInFieldInternalName is null) throw new UniversalException($"Поле {userInFieldCellValue.Trim()} не найдено в списке UserInFields (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}4\")");
                     lcForCurrentState.Switch.Case.Add(RulesForUserInFieldDS.GenerateRulesForUserInFieldDS(worksheet, columnLetter, INs, userInFieldInternalName));
                 }
             }

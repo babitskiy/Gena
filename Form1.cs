@@ -1,5 +1,4 @@
-using ClosedXML.Excel;
-using System.Windows.Forms;
+using Gena.Extensions;
 
 namespace Gena
 {
@@ -13,6 +12,12 @@ namespace Gena
         {
             InitializeComponent();
         }
+        private void addFromNewLine(string msg, Color color)
+        {
+            richTextBox_Logs.AppendText("\r\n");
+            richTextBox_Logs.AppendText(msg, color);
+        }
+
         private void addFromNewLine(string msg)
         {
             richTextBox_Logs.AppendText("\r\n");
@@ -40,7 +45,7 @@ namespace Gena
                 if (fileExtension == ".xlsx" || fileExtension == ".xls")
                     canStart = true;
                 else
-                    addFromNewLine(@"Нужно выбрать excel-файл с расширением .xls или .xlsx");
+                    addFromNewLine(@"Нужно выбрать excel-файл с расширением .xls или .xlsx", Color.Yellow);
                 
                 //Закрыть соединение с файлом (нужно?)
                 //sr.Close();
@@ -63,34 +68,36 @@ namespace Gena
 
                     var pathToFolderWithLCFiles = parentFolder + "\\" + fileNameWithoutExtension;
                     Directory.CreateDirectory(pathToFolderWithLCFiles);
-                    addFromNewLine(@"Создана папка " + fileName);
+                    addFromNewLine(@"Создана папка " + fileNameWithoutExtension, Color.Green);
 
                     try
                     {
                         if (LifeCycleGenerator.GenerateLifeCycle(openFileDialog1.FileName, pathToFolderWithLCFiles, systemType))
-                            addFromNewLine(@"Жц сгенерирован успешно");
+                        {
+                            addFromNewLine(@"Жц сгенерирован успешно", Color.Green);
+                        }
                         else
-                            addFromNewLine(@"Что-то пошло не так");
+                            addFromNewLine(@"Что-то пошло не так, обратитесь к разработчику", Color.Red);
                     }
                     catch (UniversalException ex)
                     {
-                        addFromNewLine(ex.Message);
+                        addFromNewLine(ex.Message, Color.Red);
                         return;
                     }
                     catch (Exception)
                     {
-                        addFromNewLine(@"Что-то пошло не так");
+                        addFromNewLine(@"Что-то пошло не так, обратитесь к разработчику", Color.Red);
                         throw;
                     }
                 }
                 else
                 {
-                    addFromNewLine(@"Вы не выбрали тип системы (DS/DSO)");
+                    addFromNewLine(@"Вы не выбрали тип системы (DS/DSO)", Color.Yellow);
                 }
             }
             else
             {
-                addFromNewLine(@"Не все правила запуска генерации соблюдены!");
+                addFromNewLine(@"Не все правила запуска генерации соблюдены!", Color.Yellow);
             }
         }
 

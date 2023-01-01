@@ -19,7 +19,8 @@ namespace Gena
         public static List<SheetStates> GenerateSheetStatesList(IXLWorkbook workbook)
         {
             //создаём список состояний из листа States
-            var worksheetStates = workbook.Worksheets.Where(w => w.Name == "States").First();
+            var worksheetStates = workbook.Worksheets.Where(w => w.Name == "States")?.FirstOrDefault();
+            if (worksheetStates is null) throw new UniversalException($"Системный список States не найден");
             var StatesList = worksheetStates.RowsUsed().Skip(1).Select(row => new
             {
                 StateId = row.Cell(1).Value,
