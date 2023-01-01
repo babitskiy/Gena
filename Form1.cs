@@ -149,5 +149,10 @@ namespace Gena
         {
 
         }
+
+        private void Gena_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
