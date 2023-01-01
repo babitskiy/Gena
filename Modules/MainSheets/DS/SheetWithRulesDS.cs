@@ -1,12 +1,7 @@
 ﻿using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Spreadsheet;
+using Gena.Exceptions;
 using Gena.SystemSheets;
 using Gena.Templates.DS;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gena.Modules.MainSheets.DS
 {
@@ -26,6 +21,14 @@ namespace Gena.Modules.MainSheets.DS
                 DocumentStates = new List<DocumentState>()
             };
 
+            //Проверяем что в текущей таблице существует строка userInGroup
+            var userInRolesRowNumber = worksheet.FirstColumnUsed().Cells().Where(e => e.Value.ToString().Trim().ToUpper() == "userInRoles".ToUpper())?.FirstOrDefault()?.Address.RowNumber ?? 0;
+            if (userInRolesRowNumber == 0) throw new UniversalException($"В таблице \"{worksheet.Name}\" отсутствует строка userInRoles");
+
+            //Проверяем что в текущей таблице существует строка userInField
+            var userInFieldRowNumber = worksheet.FirstColumnUsed().Cells().Where(e => e.Value.ToString().Trim().ToUpper() == "userInField".ToUpper())?.FirstOrDefault()?.Address.RowNumber ?? 0;
+            if (userInFieldRowNumber == 0) throw new UniversalException($"В таблице \"{worksheet.Name}\" отсутствует строка userInField");
+
             //for each state generate rules
             foreach (var columnWithRules in columnsWithRules)
             {
@@ -40,12 +43,12 @@ namespace Gena.Modules.MainSheets.DS
                 {
                     lcForCurrentState = lc.DocumentStates.SingleOrDefault(e => e.ID == currentStateID);
                     //lcForCurrentState = CreateRulesForExistState<DocumentState>(worksheet, columnWithRules.Address.ColumnLetter, currentStateID, INs, lcForCurrentState);
-                    lcForCurrentState = RulesForDocumentStateDS.CreateRulesForDocumentStateDS<DocumentState>(worksheet, columnWithRules.Address.ColumnLetter, columnWithRules.StateName, currentStateID, INs, lcForCurrentState, UserInFieldsSheetList, UserInRolesSheetList);
+                    lcForCurrentState = RulesForDocumentStateDS.CreateRulesForDocumentStateDS<DocumentState>(worksheet, columnWithRules.Address.ColumnLetter, columnWithRules.StateName, currentStateID, INs, lcForCurrentState, UserInFieldsSheetList, UserInRolesSheetList, userInRolesRowNumber, userInFieldRowNumber);
                 }
                 else
                 {
                     //lcForCurrentState = CreateRulesForNewState<DocumentState>(worksheet, columnWithRules.Address.ColumnLetter, tempStateName, currentStateID, INs);
-                    lcForCurrentState = RulesForDocumentStateDS.CreateRulesForDocumentStateDS<DocumentState>(worksheet, columnWithRules.Address.ColumnLetter, columnWithRules.StateName, currentStateID, INs, null, UserInFieldsSheetList, UserInRolesSheetList);
+                    lcForCurrentState = RulesForDocumentStateDS.CreateRulesForDocumentStateDS<DocumentState>(worksheet, columnWithRules.Address.ColumnLetter, columnWithRules.StateName, currentStateID, INs, null, UserInFieldsSheetList, UserInRolesSheetList, userInRolesRowNumber, userInFieldRowNumber);
                     lc.DocumentStates.Add(lcForCurrentState);
                 }
             }

@@ -1,18 +1,10 @@
 ﻿using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Math;
-using DocumentFormat.OpenXml.Spreadsheet;
 using Gena.Modules.MainSheets.DS;
 using Gena.Modules.MainSheets.DSO;
 using Gena.Serializers;
 using Gena.SystemSheets;
 using Gena.Templates.DS;
 using Gena.Templates.DSO;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gena
 {
@@ -32,7 +24,6 @@ namespace Gena
                 //генерируем список всех настроек из таблицы Settings
                 var SettingsSheetList = SheetSettings.GenerateSheetSettingsList(workbook);
                 var SystemWorksheets = SettingsSheetList.Where(e => e?.Name?.Trim() == "SystemWorksheets").FirstOrDefault()?.Rule?.Split(';', StringSplitOptions.TrimEntries);
-
 
                 if(systemType == "DSO")
                 {

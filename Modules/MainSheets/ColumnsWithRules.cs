@@ -5,9 +5,6 @@ namespace Gena.Modules.MainSheets
     //класс для колонок с описанием правил жц
     internal class ColumnsWithRules
     {
-        private string stateName;
-        private IXLAddress address;
-
         public string StateName { get; set; }
         public IXLAddress Address { get; set; }
 
@@ -30,26 +27,29 @@ namespace Gena.Modules.MainSheets
                     tempStateName = item.StateName.ToString();
                 }
 
-                //проверяем если состояний в ячейке указано несколько, то создаём для каждой объект
-                if (tempStateName.Contains(';'))
+                if (tempStateName != "") //данной проверкой отсекаем все пустые состояния в таблице
                 {
-                    var statesInCell = tempStateName.Split(';');
-                    foreach (var state in statesInCell)
+                    //проверяем если состояний в ячейке указано несколько, то создаём для каждой объект
+                    if (tempStateName.Contains(';'))
+                    {
+                        var statesInCell = tempStateName.Split(';');
+                        foreach (var state in statesInCell)
+                        {
+                            columnsWithRulesList.Add(new ColumnsWithRules()
+                            {
+                                StateName = state.Trim(),
+                                Address = item.Address
+                            });
+                        }
+                    }
+                    else
                     {
                         columnsWithRulesList.Add(new ColumnsWithRules()
                         {
-                            StateName = state.Trim(),
+                            StateName = tempStateName,
                             Address = item.Address
                         });
                     }
-                }
-                else
-                {
-                    columnsWithRulesList.Add(new ColumnsWithRules()
-                    {
-                        StateName = tempStateName,
-                        Address = item.Address
-                    });
                 }
             }
             return columnsWithRulesList;

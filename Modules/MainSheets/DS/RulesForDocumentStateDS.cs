@@ -8,7 +8,7 @@ namespace Gena.Modules.MainSheets.DS
     internal class RulesForDocumentStateDS
     {
         //метод обновления существующего StateSettings
-        public static T CreateRulesForDocumentStateDS<T>(IXLWorksheet worksheet, string columnLetter, string tempStateName, int currentStateID, List<InternalNames> INs, T lcForCurrentState, List<SheetUserInFields> userInFieldSheetList, List<SheetUserInRoles> userInRoleSheetList) where T : DocumentState, new()
+        public static T CreateRulesForDocumentStateDS<T>(IXLWorksheet worksheet, string columnLetter, string tempStateName, int currentStateID, List<InternalNames> INs, T lcForCurrentState, List<SheetUserInFields> userInFieldSheetList, List<SheetUserInRoles> userInRoleSheetList, int userInRolesRowNumber, int userInFieldRowNumber) where T : DocumentState, new()
         {
             if (lcForCurrentState == null)
             {
@@ -32,8 +32,9 @@ namespace Gena.Modules.MainSheets.DS
                 };
             }
 
-            var userInRoleCellValue = (string)worksheet.Cell(3, columnLetter).Value;
-            var userInFieldCellValue = (string)worksheet.Cell(4, columnLetter).Value;
+            //Получаем значения в ячейках на пересечении текущего состояния и строк userInRoles/userInField
+            var userInRoleCellValue = (string)worksheet.Cell(userInRolesRowNumber, columnLetter).Value;
+            var userInFieldCellValue = (string)worksheet.Cell(userInFieldRowNumber, columnLetter).Value;
 
             //если ячейка UserInGroup заполнена то вызываем генерацию правил для неё
             if (userInRoleCellValue != "" && userInRoleCellValue != "По умолчанию" && userInRoleCellValue != "Default") //проверяем есть ли в этой колонке правила для userInRoles

@@ -1,12 +1,7 @@
 ﻿using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Spreadsheet;
+using Gena.Exceptions;
 using Gena.SystemSheets;
 using Gena.Templates.DSO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gena.Modules.MainSheets.DSO
 {
@@ -23,6 +18,18 @@ namespace Gena.Modules.MainSheets.DSO
             //создаём экземпляр жц
             var lc = new T();
 
+            //Проверяем что в текущей таблице существует строка userInGroup
+            var userInGroupRowNumber = worksheet.FirstColumnUsed().Cells().Where(e => e.Value.ToString().Trim().ToUpper() == "userInGroup".ToUpper())?.FirstOrDefault()?.Address.RowNumber ?? 0;
+            if (userInGroupRowNumber == 0) throw new UniversalException($"В таблице \"{worksheet.Name}\" отсутствует строка userInGroup");
+
+            //Проверяем что в текущей таблице существует строка userInField
+            var userInFieldRowNumber = worksheet.FirstColumnUsed().Cells().Where(e => e.Value.ToString().Trim().ToUpper() == "userInField".ToUpper())?.FirstOrDefault()?.Address.RowNumber ?? 0;
+            if (userInFieldRowNumber == 0) throw new UniversalException($"В таблице \"{worksheet.Name}\" отсутствует строка userInField");
+
+            //Проверяем что в текущей таблице существует строка priorityDSO
+            var priorityRowNumber = worksheet.FirstColumnUsed().Cells().Where(e => e.Value.ToString().Trim().ToUpper() == "priorityDSO".ToUpper())?.FirstOrDefault()?.Address.RowNumber ?? 0;
+            if (priorityRowNumber == 0) throw new UniversalException($"В таблице \"{worksheet.Name}\" отсутствует строка priorityDSO");
+
             //for each state generate rules
             foreach (var columnWithRules in columnsWithRules)
             {
@@ -37,12 +44,12 @@ namespace Gena.Modules.MainSheets.DSO
                 {
                     //добавляем новые правила в существующий DocumentState
                     lcForCurrentState = lc.SingleOrDefault(e => e.docState == currentStateID);
-                    lcForCurrentState = RulesForDocumentStateDSO.CreateRulesForDocumentStateDSO<DocumentStateDSO>(worksheet, columnWithRules.Address.ColumnLetter, columnWithRules.StateName, currentStateID, INs, lcForCurrentState, UserInFieldsSheetList, GroupsSheetList);
+                    lcForCurrentState = RulesForDocumentStateDSO.CreateRulesForDocumentStateDSO<DocumentStateDSO>(worksheet, columnWithRules.Address.ColumnLetter, columnWithRules.StateName, currentStateID, INs, lcForCurrentState, UserInFieldsSheetList, GroupsSheetList, userInGroupRowNumber, userInFieldRowNumber, priorityRowNumber);
                 }
                 else
                 {
                     //создаём DocumentState и добавляем его в общий жц
-                    lcForCurrentState = RulesForDocumentStateDSO.CreateRulesForDocumentStateDSO<DocumentStateDSO>(worksheet, columnWithRules.Address.ColumnLetter, columnWithRules.StateName, currentStateID, INs, null, UserInFieldsSheetList, GroupsSheetList);
+                    lcForCurrentState = RulesForDocumentStateDSO.CreateRulesForDocumentStateDSO<DocumentStateDSO>(worksheet, columnWithRules.Address.ColumnLetter, columnWithRules.StateName, currentStateID, INs, null, UserInFieldsSheetList, GroupsSheetList, userInGroupRowNumber, userInFieldRowNumber, priorityRowNumber);
                     lc.Add(lcForCurrentState);
                 }
             }

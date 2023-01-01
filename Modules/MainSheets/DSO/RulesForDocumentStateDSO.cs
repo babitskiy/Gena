@@ -1,21 +1,15 @@
 ﻿using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Spreadsheet;
 using Gena.Exceptions;
 using Gena.SystemSheets;
 using Gena.Templates.DSO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Net.Security;
 
 namespace Gena.Modules.MainSheets.DSO
 {
     internal class RulesForDocumentStateDSO
     {
         //метод обновления существующего StateSettings
-        public static T CreateRulesForDocumentStateDSO<T>(IXLWorksheet worksheet, string columnLetter, string tempStateName, int currentStateID, List<InternalNames> INs, T lcForCurrentState, List<SheetUserInFields> userInFieldSheets, List<SheetGroups> GroupsSheetList) where T : DocumentStateDSO, new()
+        public static T CreateRulesForDocumentStateDSO<T>(IXLWorksheet worksheet, string columnLetter, string tempStateName, int currentStateID, List<InternalNames> INs, T lcForCurrentState, List<SheetUserInFields> userInFieldSheets, List<SheetGroups> GroupsSheetList, int userInGroupRowNumber, int userInFieldRowNumber, int priorityRowNumber) where T : DocumentStateDSO, new()
         {
             if (lcForCurrentState == null)
             {
@@ -35,9 +29,13 @@ namespace Gena.Modules.MainSheets.DSO
                 };
             }
 
-            var userInGroupCellValue = (string)worksheet.Cell(3, columnLetter).Value;
-            var userInFieldCellValue = (string)worksheet.Cell(4, columnLetter).Value;
-            var checkPriorityValue = int.TryParse(worksheet.Cell(5, columnLetter).Value.ToString(), out var priorityValue);
+            var userInGroupCellValue = (string)worksheet.Cell(userInGroupRowNumber, columnLetter).Value;
+
+            var userInFieldCellValue = (string)worksheet.Cell(userInFieldRowNumber, columnLetter).Value;
+
+            var checkPriorityValue = int.TryParse(worksheet.Cell(priorityRowNumber, columnLetter).Value.ToString(), out var priorityValue);
+            if (priorityValue > 100) throw new UniversalException($"Значение приоритета не может быть больше чем 100 (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}{priorityRowNumber}\")");
+            if (priorityValue < 0) throw new UniversalException($"Значение приоритета не может быть отрицательным числом (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}{priorityRowNumber}\")");
 
             //если ячейка UserInGroup заполнена то вызываем генерацию правил для неё
             if (userInGroupCellValue != "" && userInGroupCellValue != "По умолчанию" && userInGroupCellValue != "Default") //проверяем есть ли в этой колонке правила для userInRoles
@@ -50,7 +48,7 @@ namespace Gena.Modules.MainSheets.DSO
                     {
                         //проверяем есть ли такая группа в списке UserInGroups, если нет - выводим ошибку
                         var gId = GroupsSheetList.Where(e => e.GroupName == groupInCell.Trim())?.FirstOrDefault()?.GroupId ?? 0;
-                        if (gId == 0) throw new UniversalException($"Группа \"{groupInCell.Trim()}\" не найдена в списке UserInGroups (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}3\")");
+                        if (gId == 0) throw new UniversalException($"Группа \"{groupInCell.Trim()}\" не найдена в списке UserInGroups (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}{userInGroupRowNumber}\")");
 
                         lcForCurrentState.stateSettings[0].userInGroup.Add(new UserInGroup
                         {
@@ -65,7 +63,7 @@ namespace Gena.Modules.MainSheets.DSO
                 {
                     //проверяем есть ли такая группа в списке UserInGroups, если нет - выводим ошибку
                     var gId = GroupsSheetList.Where(e => e.GroupName == userInGroupCellValue.Trim())?.FirstOrDefault()?.GroupId ?? 0;
-                    if (gId == 0) throw new UniversalException($"Группа \"{userInGroupCellValue.Trim()}\" не найдена в списке UserInGroups (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}3\")");
+                    if (gId == 0) throw new UniversalException($"Группа \"{userInGroupCellValue.Trim()}\" не найдена в списке UserInGroups (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}{userInGroupRowNumber}\")");
 
                     lcForCurrentState.stateSettings[0].userInGroup.Add(new UserInGroup
                     {
@@ -87,7 +85,7 @@ namespace Gena.Modules.MainSheets.DSO
                     {
                         //проверяем есть ли такое поле в списке UserInFields, если нет - выводим ошибку
                         var fName = userInFieldSheets.Where(e => e.FieldName == fieldInCell.Trim())?.FirstOrDefault()?.InternalName;
-                        if (fName is null) throw new UniversalException($"Поле {fieldInCell.Trim()} не найдено в списке UserInFields (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}4\")");
+                        if (fName is null) throw new UniversalException($"Поле {fieldInCell.Trim()} не найдено в списке UserInFields (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}{userInFieldRowNumber}\")");
 
                         lcForCurrentState.stateSettings[0].userInField.Add(new UserInField
                         {
@@ -102,7 +100,7 @@ namespace Gena.Modules.MainSheets.DSO
                 {
                     //проверяем есть ли такое поле в списке UserInFields, если нет - выводим ошибку
                     var fName = userInFieldSheets.Where(e => e.FieldName == userInFieldCellValue.Trim())?.FirstOrDefault()?.InternalName;
-                    if (fName is null) throw new UniversalException($"Поле \"{userInFieldCellValue.Trim()}\" не найдено в списке UserInFields (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}4\")");
+                    if (fName is null) throw new UniversalException($"Поле \"{userInFieldCellValue.Trim()}\" не найдено в списке UserInFields (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}{userInFieldRowNumber}\")");
 
                     lcForCurrentState.stateSettings[0].userInField.Add(new UserInField
                     {

@@ -5,7 +5,6 @@ namespace Gena
 {
     public partial class Gena : Form
     {
-        bool f_open; //определяют выбор файла
         bool canStart = false; //определяет можно ли запускать генерацию
         string? systemType = null; //определяет тип системы DS/DSO
 
@@ -39,9 +38,6 @@ namespace Gena
                 label1.Text = openFileDialog1.FileName;
 
                 addFromNewLine(@"Выбран файл " + fileName);
-
-                //Установить флажок f_open
-                f_open = true;
 
                 if (fileExtension == ".xlsx" || fileExtension == ".xls")
                     canStart = true;
