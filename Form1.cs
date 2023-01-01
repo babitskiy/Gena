@@ -1,3 +1,4 @@
+using Gena.Exceptions;
 using Gena.Extensions;
 
 namespace Gena

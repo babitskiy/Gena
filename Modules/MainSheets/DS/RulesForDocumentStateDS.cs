@@ -1,12 +1,9 @@
 ﻿using ClosedXML.Excel;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Gena.Exceptions;
+using Gena.SystemSheets;
+using Gena.Templates.DS;
 
-namespace Gena
+namespace Gena.Modules.MainSheets.DS
 {
     internal class RulesForDocumentStateDS
     {

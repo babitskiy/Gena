@@ -1,7 +1,8 @@
 ﻿using System.Text.Encodings.Web;
 using System.Text.Json;
+using Gena.Templates.DSO;
 
-namespace Gena
+namespace Gena.Serializers
 {
     internal class DSOSerializer
     {

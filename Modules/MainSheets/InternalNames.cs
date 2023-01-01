@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gena
+namespace Gena.Modules.MainSheets
 {
     internal class InternalNames
     {
@@ -20,11 +20,11 @@ namespace Gena
         public static List<InternalNames> GenerateInternalNamesSheetList(IXLWorksheet worksheet)
         {
             //собираем все InternalNames в текущей таблице (ячейки начиная с шестой)
-            var internalNamesFromCurrentSheet = worksheet.Column(2).Cells().Skip(5).Select((v, i) => new 
-            { 
-                Value = v.Value, 
-                Index = i + 1, 
-                Address = v.Address 
+            var internalNamesFromCurrentSheet = worksheet.Column(2).Cells().Skip(5).Select((v, i) => new
+            {
+                v.Value,
+                Index = i + 1,
+                v.Address
             });
             List<InternalNames> INs = new List<InternalNames>();
             foreach (var item in internalNamesFromCurrentSheet)

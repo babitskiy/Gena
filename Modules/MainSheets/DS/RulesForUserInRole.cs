@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using Gena.Templates.DS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Gena
+namespace Gena.Modules.MainSheets.DS
 {
     internal class RulesForUserInRole
     {

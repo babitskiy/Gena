@@ -1,13 +1,7 @@
 ﻿using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Spreadsheet;
-using System;
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Gena.Exceptions;
 
-namespace Gena
+namespace Gena.SystemSheets
 {
     internal class SheetGroups
     {

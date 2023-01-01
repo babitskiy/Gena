@@ -1,5 +1,8 @@
 ﻿using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Spreadsheet;
+using Gena.Exceptions;
+using Gena.SystemSheets;
+using Gena.Templates.DSO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,12 +10,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Gena
+namespace Gena.Modules.MainSheets.DSO
 {
     internal class RulesForDocumentStateDSO
     {
         //метод обновления существующего StateSettings
-        public static T CreateRulesForDocumentStateDSO<T>( IXLWorksheet worksheet, string columnLetter, string tempStateName, int currentStateID, List<InternalNames> INs, T lcForCurrentState, List<SheetUserInFields> userInFieldSheets, List<SheetGroups> GroupsSheetList) where T : DocumentStateDSO, new()
+        public static T CreateRulesForDocumentStateDSO<T>(IXLWorksheet worksheet, string columnLetter, string tempStateName, int currentStateID, List<InternalNames> INs, T lcForCurrentState, List<SheetUserInFields> userInFieldSheets, List<SheetGroups> GroupsSheetList) where T : DocumentStateDSO, new()
         {
             if (lcForCurrentState == null)
             {

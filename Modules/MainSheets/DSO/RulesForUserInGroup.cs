@@ -1,11 +1,7 @@
 ﻿using ClosedXML.Excel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Gena.Templates.DSO;
 
-namespace Gena
+namespace Gena.Modules.MainSheets.DSO
 {
     internal class RulesForUserInGroup
     {

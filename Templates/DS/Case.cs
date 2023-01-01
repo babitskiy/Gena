@@ -1,9 +1,9 @@
 ﻿using System.Xml.Serialization;
 
-namespace Gena
+namespace Gena.Templates.DS
 {
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://schemas.conteq.ru/sharepoint/v4/configuration/states")]
+    [System.ComponentModel.DesignerCategory("code")]
+    [XmlType(AnonymousType = true, Namespace = "http://schemas.conteq.ru/sharepoint/v4/configuration/states")]
     public class Case
     {
         [XmlElement("SetField")]
@@ -19,11 +19,11 @@ namespace Gena
 
         public CaseSetForm SetForm { get; set; }
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public string UserInRoles { get; set; }
 
 
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute()]
         public string UserInFields { get; set; }
     }
 }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gena
+namespace Gena.SystemSheets
 {
     internal class SheetSettings
     {
@@ -23,7 +23,7 @@ namespace Gena
                 Rule = row.Cell(2).Value
             });
             List<SheetSettings> SettingsSheetList = new List<SheetSettings>();
-            if(SettingsList != null)
+            if (SettingsList != null)
             {
                 foreach (var item in SettingsList)
                 {

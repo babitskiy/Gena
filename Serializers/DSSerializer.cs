@@ -1,8 +1,9 @@
 ﻿using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using Gena.Templates.DS;
 
-namespace Gena
+namespace Gena.Serializers
 {
     internal class DSSerializer
     {

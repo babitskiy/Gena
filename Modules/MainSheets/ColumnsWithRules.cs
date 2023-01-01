@@ -1,6 +1,6 @@
 ﻿using ClosedXML.Excel;
 
-namespace Gena
+namespace Gena.Modules.MainSheets
 {
     //класс для колонок с описанием правил жц
     internal class ColumnsWithRules
@@ -18,7 +18,7 @@ namespace Gena
             var columnsWithRulesFromCurrentSheet = worksheet.FirstRowUsed().Cells().Skip(2).Select((v, i) => new
             {
                 StateName = v.Value,
-                Address = v.Address
+                v.Address
             });
             string tempStateName = ""; //такая переменная нужна для проверки на null в ячейке где должно быть состояние
             List<ColumnsWithRules> columnsWithRulesList = new List<ColumnsWithRules>();

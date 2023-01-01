@@ -1,11 +1,12 @@
 ﻿using ClosedXML.Excel;
+using Gena.Templates.DSO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gena
+namespace Gena.Modules.MainSheets.DSO
 {
     internal class RulesForDefaultDSO
     {
