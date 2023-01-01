@@ -45,9 +45,13 @@ namespace Gena
                     var groupsInCell = userInGroupCellValue.Split(';');
                     foreach (var groupInCell in groupsInCell)
                     {
+                        //проверяем есть ли такая группа в списке UserInGroups, если нет - выводим ошибку
+                        var gId = GroupsSheetList.Where(e => e.GroupName == groupInCell.Trim())?.FirstOrDefault()?.GroupId ?? 0;
+                        if (gId == 0) throw new UniversalException($"Группа \"{groupInCell.Trim()}\" не найдена в списке UserInGroups (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}3\")");
+
                         lcForCurrentState.stateSettings[0].userInGroup.Add(new UserInGroup
                         {
-                            groupId = GroupsSheetList.Where(e => e.GroupName == groupInCell.Trim()).First().GroupId,
+                            groupId = gId,
                             groupName = groupInCell.Trim(),
                             priority = priorityValue,
                             fieldSettings = RulesForUserInGroup.GenerateRulesForUserInGroup(worksheet, columnLetter, INs, groupInCell.Trim())
@@ -56,9 +60,13 @@ namespace Gena
                 }
                 else
                 {
+                    //проверяем есть ли такая группа в списке UserInGroups, если нет - выводим ошибку
+                    var gId = GroupsSheetList.Where(e => e.GroupName == userInGroupCellValue.Trim())?.FirstOrDefault()?.GroupId ?? 0;
+                    if (gId == 0) throw new UniversalException($"Группа \"{userInGroupCellValue.Trim()}\" не найдена в списке UserInGroups (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}3\")");
+
                     lcForCurrentState.stateSettings[0].userInGroup.Add(new UserInGroup
                     {
-                        groupId = GroupsSheetList.Where(e => e.GroupName == userInGroupCellValue).First().GroupId,
+                        groupId = gId,
                         groupName = userInGroupCellValue,
                         priority = priorityValue,
                         fieldSettings = RulesForUserInGroup.GenerateRulesForUserInGroup(worksheet, columnLetter, INs, userInGroupCellValue)
@@ -74,7 +82,10 @@ namespace Gena
                     var fieldsInCell = userInFieldCellValue.Split(';');
                     foreach (var fieldInCell in fieldsInCell)
                     {
-                        var fName = userInFieldSheets.Where(e => e.FieldName == fieldInCell.Trim()).First().InternalName;
+                        //проверяем есть ли такое поле в списке UserInFields, если нет - выводим ошибку
+                        var fName = userInFieldSheets.Where(e => e.FieldName == fieldInCell.Trim())?.FirstOrDefault()?.InternalName;
+                        if (fName is null) throw new UniversalException($"Поле {fieldInCell.Trim()} не найдено в списке UserInFields (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}4\")");
+
                         lcForCurrentState.stateSettings[0].userInField.Add(new UserInField
                         {
                             field = fieldInCell.Trim(),
@@ -86,10 +97,14 @@ namespace Gena
                 }
                 else
                 {
+                    //проверяем есть ли такое поле в списке UserInFields, если нет - выводим ошибку
+                    var fName = userInFieldSheets.Where(e => e.FieldName == userInFieldCellValue.Trim())?.FirstOrDefault()?.InternalName;
+                    if (fName is null) throw new UniversalException($"Поле \"{userInFieldCellValue.Trim()}\" не найдено в списке UserInFields (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}4\")");
+
                     lcForCurrentState.stateSettings[0].userInField.Add(new UserInField
                     {
                         field = userInFieldCellValue,
-                        fieldName = userInFieldSheets.Where(e => e.FieldName == userInFieldCellValue).First().InternalName,
+                        fieldName = fName,
                         priority = priorityValue,
                         fieldSettings = RulesForUserInFieldDSO.GenerateRulesForUserInFieldDSO(worksheet, columnLetter, INs, userInFieldCellValue)
                     });

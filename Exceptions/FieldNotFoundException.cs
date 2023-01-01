@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Gena
 {
-    internal class FieldNotFoundException : Exception
+    internal class UniversalException : Exception
     {
-        public FieldNotFoundException(string customMsg) : base(customMsg)
+        public UniversalException(string customMsg) : base(customMsg)
         {
 
         }

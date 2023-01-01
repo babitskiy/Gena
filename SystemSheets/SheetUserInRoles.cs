@@ -11,9 +11,6 @@ namespace Gena
 {
     internal class SheetUserInRoles
     {
-        private string roleInternalName;
-        private string roleName;
-
         public string RoleInternalName { get; set; }
         public string RoleName { get; set; }
 

@@ -13,11 +13,10 @@ namespace Gena
         {
             InitializeComponent();
         }
-
-        public void addLog(string log) 
+        private void addFromNewLine(string msg)
         {
             richTextBox_Logs.AppendText("\r\n");
-            richTextBox_Logs.AppendText(log);
+            richTextBox_Logs.AppendText(msg);
         }
 
         private void btnChooseExcelFile_Click(object sender, EventArgs e)
@@ -33,139 +32,78 @@ namespace Gena
                 //Вывести имя файла на форме в компоненте label1
                 label1.Text = openFileDialog1.FileName;
 
-                richTextBox_Logs.AppendText("\r\n");
-                richTextBox_Logs.AppendText(@"Выбран файл " + fileName);
+                addFromNewLine(@"Выбран файл " + fileName);
 
                 //Установить флажок f_open
                 f_open = true;
 
                 if (fileExtension == ".xlsx" || fileExtension == ".xls")
-                {
                     canStart = true;
-                }
                 else
-                {
-                    richTextBox_Logs.AppendText("\r\n");
-                    richTextBox_Logs.AppendText(@"Нужно выбрать excel-файл с расширением .xls или .xlsx");
-                }
-                // 7. Закрыть соединение с файлом
+                    addFromNewLine(@"Нужно выбрать excel-файл с расширением .xls или .xlsx");
+                
+                //Закрыть соединение с файлом (нужно?)
                 //sr.Close();
             }
         }
+
 
         private void btnStartGeneration_Click(object sender, EventArgs e)
         {
             if(canStart)
             {
-                //Получаем инфу о директории в которой находится эксель-файл
-                DirectoryInfo directoryInfo = new DirectoryInfo(openFileDialog1.FileName);
-                var fileExtension = Path.GetExtension(openFileDialog1.FileName);
-                var fileName = Path.GetFileName(openFileDialog1.FileName);
-                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(openFileDialog1.FileName);
-                var parentFolder = directoryInfo.Parent;
-
                 if(systemType != null)
                 {
-                    if (systemType == "DS")
+                    //Получаем инфу о директории в которой находится эксель-файл
+                    DirectoryInfo directoryInfo = new DirectoryInfo(openFileDialog1.FileName);
+                    var fileExtension = Path.GetExtension(openFileDialog1.FileName);
+                    var fileName = Path.GetFileName(openFileDialog1.FileName);
+                    var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(openFileDialog1.FileName);
+                    var parentFolder = directoryInfo.Parent;
+
+                    var pathToFolderWithLCFiles = parentFolder + "\\" + fileNameWithoutExtension;
+                    Directory.CreateDirectory(pathToFolderWithLCFiles);
+                    addFromNewLine(@"Создана папка " + fileName);
+
+                    try
                     {
-                        var pathToFolderWithXMLFiles = parentFolder + "\\" + fileNameWithoutExtension;
-                        Directory.CreateDirectory(pathToFolderWithXMLFiles);
-                        richTextBox_Logs.AppendText("\r\n");
-                        richTextBox_Logs.AppendText(@"Создана папка " + fileName);
-
-                        try
-                        {
-                            if (LifeCycleGenerator.GenerateLifeCycle(openFileDialog1.FileName, pathToFolderWithXMLFiles, systemType))
-                            {
-                                richTextBox_Logs.AppendText("\r\n");
-                                richTextBox_Logs.AppendText(@"Жц сгенерирован успешно");
-                            }
-                            else
-                            {
-                                richTextBox_Logs.AppendText("\r\n");
-                                richTextBox_Logs.AppendText(@"Что-то пошло не так");
-                            }
-                        }
-                        catch (FieldAccessException ex)
-                        {
-                            richTextBox_Logs.AppendText("\r\n");
-                            richTextBox_Logs.AppendText(ex.Message);
-                            return;
-                        }
-                        catch (Exception)
-                        {
-
-                            throw;
-                        }
+                        if (LifeCycleGenerator.GenerateLifeCycle(openFileDialog1.FileName, pathToFolderWithLCFiles, systemType))
+                            addFromNewLine(@"Жц сгенерирован успешно");
+                        else
+                            addFromNewLine(@"Что-то пошло не так");
                     }
-                    else if (systemType == "DSO")
+                    catch (UniversalException ex)
                     {
-                        var pathToFolderWithJSONFiles = parentFolder + "\\" +fileNameWithoutExtension;
-                        Directory.CreateDirectory(pathToFolderWithJSONFiles);
-                        richTextBox_Logs.AppendText("\r\n");
-                        richTextBox_Logs.AppendText(@"Создана папка " + fileName);
-
-                        try
-                        {
-                            if (LifeCycleGenerator.GenerateLifeCycle(openFileDialog1.FileName, pathToFolderWithJSONFiles, systemType))
-                            {
-                                richTextBox_Logs.AppendText("\r\n");
-                                richTextBox_Logs.AppendText(@"Жц сгенерирован успешно");
-                            }
-                            else
-                            {
-                                richTextBox_Logs.AppendText("\r\n");
-                                richTextBox_Logs.AppendText(@"Что-то пошло не так");
-                            }
-                        }
-                        catch (FieldNotFoundException ex)
-                        {
-                            richTextBox_Logs.AppendText("\r\n");
-                            richTextBox_Logs.AppendText(ex.Message);
-                            return;
-                        }
-                        catch (Exception)
-                        {
-
-                            throw;
-                        }
+                        addFromNewLine(ex.Message);
+                        return;
+                    }
+                    catch (Exception)
+                    {
+                        addFromNewLine(@"Что-то пошло не так");
+                        throw;
                     }
                 }
                 else
                 {
-                    richTextBox_Logs.AppendText("\r\n");
-                    richTextBox_Logs.AppendText(@"Вы не выбрали тип системы (DS/DSO)");
+                    addFromNewLine(@"Вы не выбрали тип системы (DS/DSO)");
                 }
             }
             else
             {
-                richTextBox_Logs.AppendText("\r\n");
-                richTextBox_Logs.AppendText(@"Не все правила запуска генерации соблюдены!");
+                addFromNewLine(@"Не все правила запуска генерации соблюдены!");
             }
         }
 
         private void radioButton_DS_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButton_DS.Checked)
-            {
-                systemType = "DS";
-            }
-            else
-            {
-                systemType = null;
-            }
+            //при выборе радио-кнопки DS, записываем DS в переменную
+            systemType = radioButton_DS.Checked ? "DS" : null;
         }
 
         private void radioButton_DSO_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButton_DSO.Checked)
-            {
-                systemType = "DSO";
-            }
-            else
-            {
-                systemType = null;
-            }
+            //при выборе радио-кнопки DSO, записываем DSO в переменную
+            systemType = radioButton_DSO.Checked ? "DSO" : null;
         }
 
         private void richTextBox_Logs_TextChanged(object sender, EventArgs e)

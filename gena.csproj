@@ -12,9 +12,4 @@
     <PackageReference Include="ClosedXML" Version="0.97.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="SystemSheets\DS\" />
-    <Folder Include="SystemSheets\DSO\" />
-  </ItemGroup>
-
 </Project>
