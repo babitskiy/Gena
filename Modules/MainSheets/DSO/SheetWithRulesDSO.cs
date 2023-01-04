@@ -40,10 +40,10 @@ namespace Gena.Modules.MainSheets.DSO
                 var lcForCurrentState = new DocumentStateDSO();
 
                 //проверяем есть ли уже объект DocumentState с таким состоянием
-                if (lc.Any(e => e.docState == currentStateID))
+                if (lc.Any(e => e.DocState == currentStateID))
                 {
                     //добавляем новые правила в существующий DocumentState
-                    lcForCurrentState = lc.SingleOrDefault(e => e.docState == currentStateID);
+                    lcForCurrentState = lc.SingleOrDefault(e => e.DocState == currentStateID);
                     lcForCurrentState = RulesForDocumentStateDSO.CreateRulesForDocumentStateDSO<DocumentStateDSO>(worksheet, columnWithRules.Address.ColumnLetter, columnWithRules.StateName, currentStateID, INs, lcForCurrentState, UserInFieldsSheetList, GroupsSheetList, userInGroupRowNumber, userInFieldRowNumber, priorityRowNumber);
                 }
                 else

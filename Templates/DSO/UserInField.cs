@@ -1,16 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace Gena.Templates.DSO
 {
     internal class UserInField
     {
-        public string field { get; set; }
-        public string fieldName { get; set; }
-        public int priority { get; set; }
-        public List<FieldSettingForUserInField> fieldSettings { get; set; }
+        [JsonPropertyName("field")]
+        public string Field { get; set; }
+
+        [JsonPropertyName("fieldName")]
+        public string FieldName { get; set; }
+
+        [JsonPropertyName("priority")]
+        public int Priority { get; set; }
+
+        [JsonPropertyName("fieldSettings")]
+        public List<FieldSettingForUserInField> FieldSettings { get; set; }
     }
 }

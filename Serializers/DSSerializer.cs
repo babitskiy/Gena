@@ -1,7 +1,7 @@
-﻿using System.Text;
+﻿using Gena.Templates.DS;
+using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
-using Gena.Templates.DS;
 
 namespace Gena.Serializers
 {

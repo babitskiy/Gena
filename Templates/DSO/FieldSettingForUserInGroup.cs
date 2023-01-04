@@ -1,40 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace Gena.Templates.DSO
 {
     internal class FieldSettingForUserInGroup
     {
-        public string name { get; set; }
-        public bool hidden { get; set; }
-        public bool required { get; set; }
-        public bool readOnly { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("hidden")]
+        public bool Hidden { get; set; }
+
+        [JsonPropertyName("required")]
+        public bool Required { get; set; }
+
+        [JsonPropertyName("readOnly")]
+        public bool ReadOnly { get; set; }
 
         //конструктор класса
         public FieldSettingForUserInGroup(string internalName, int parameter)
         {
-            name = internalName;
+            Name = internalName;
             switch (parameter)
             {
                 case 0:
-                    readOnly = false; hidden = true; required = false;
+                    Hidden = true;
                     break;
                 case 1:
-                    readOnly = true; hidden = false; required = false;
-                    break;
-                case 2:
-                    readOnly = false; hidden = false; required = false;
+                    ReadOnly = true;
                     break;
                 case 3:
-                    readOnly = false; hidden = false; required = true;
+                    Required = true;
                     break;
                 default:
                     break;
             }
         }
-        public FieldSettingForUserInGroup() { }
     }
 }

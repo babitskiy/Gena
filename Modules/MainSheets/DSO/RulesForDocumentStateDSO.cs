@@ -2,7 +2,6 @@
 using Gena.Exceptions;
 using Gena.SystemSheets;
 using Gena.Templates.DSO;
-using System.Net.Security;
 
 namespace Gena.Modules.MainSheets.DSO
 {
@@ -15,15 +14,15 @@ namespace Gena.Modules.MainSheets.DSO
             {
                 lcForCurrentState = new T()
                 {
-                    docState = currentStateID,
-                    stateName = tempStateName,
-                    stateSettings = new List<StateSetting>()
+                    DocState = currentStateID,
+                    StateName = tempStateName,
+                    StateSettings = new List<StateSetting>()
                     {
                         new StateSetting()
                         {
-                            userInField = new List<UserInField>(),
-                            userInGroup = new List<UserInGroup>(),
-                            fieldSettingsByState = new List<FieldSettingsByState>()
+                            UserInField = new List<UserInField>(),
+                            UserInGroup = new List<UserInGroup>(),
+                            FieldSettingsByState = new List<FieldSettingsByState>()
                         }
                     }
                 };
@@ -50,12 +49,12 @@ namespace Gena.Modules.MainSheets.DSO
                         var gId = GroupsSheetList.Where(e => e.GroupName == groupInCell.Trim())?.FirstOrDefault()?.GroupId ?? 0;
                         if (gId == 0) throw new UniversalException($"Группа \"{groupInCell.Trim()}\" не найдена в списке UserInGroups (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}{userInGroupRowNumber}\")");
 
-                        lcForCurrentState.stateSettings[0].userInGroup.Add(new UserInGroup
+                        lcForCurrentState.StateSettings[0].UserInGroup.Add(new UserInGroup
                         {
-                            groupId = gId,
-                            groupName = groupInCell.Trim(),
-                            priority = priorityValue,
-                            fieldSettings = RulesForUserInGroup.GenerateRulesForUserInGroup(worksheet, columnLetter, INs, groupInCell.Trim())
+                            GroupId = gId,
+                            GroupName = groupInCell.Trim(),
+                            Priority = priorityValue,
+                            FieldSettings = RulesForUserInGroup.GenerateRulesForUserInGroup(worksheet, columnLetter, INs, groupInCell.Trim())
                         });
                     }
                 }
@@ -65,12 +64,12 @@ namespace Gena.Modules.MainSheets.DSO
                     var gId = GroupsSheetList.Where(e => e.GroupName == userInGroupCellValue.Trim())?.FirstOrDefault()?.GroupId ?? 0;
                     if (gId == 0) throw new UniversalException($"Группа \"{userInGroupCellValue.Trim()}\" не найдена в списке UserInGroups (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}{userInGroupRowNumber}\")");
 
-                    lcForCurrentState.stateSettings[0].userInGroup.Add(new UserInGroup
+                    lcForCurrentState.StateSettings[0].UserInGroup.Add(new UserInGroup
                     {
-                        groupId = gId,
-                        groupName = userInGroupCellValue,
-                        priority = priorityValue,
-                        fieldSettings = RulesForUserInGroup.GenerateRulesForUserInGroup(worksheet, columnLetter, INs, userInGroupCellValue)
+                        GroupId = gId,
+                        GroupName = userInGroupCellValue,
+                        Priority = priorityValue,
+                        FieldSettings = RulesForUserInGroup.GenerateRulesForUserInGroup(worksheet, columnLetter, INs, userInGroupCellValue)
                     });
                 }
             }
@@ -87,12 +86,12 @@ namespace Gena.Modules.MainSheets.DSO
                         var fName = userInFieldSheets.Where(e => e.FieldName == fieldInCell.Trim())?.FirstOrDefault()?.InternalName;
                         if (fName is null) throw new UniversalException($"Поле {fieldInCell.Trim()} не найдено в списке UserInFields (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}{userInFieldRowNumber}\")");
 
-                        lcForCurrentState.stateSettings[0].userInField.Add(new UserInField
+                        lcForCurrentState.StateSettings[0].UserInField.Add(new UserInField
                         {
-                            field = fieldInCell.Trim(),
-                            fieldName = fName,
-                            priority = priorityValue,
-                            fieldSettings = RulesForUserInFieldDSO.GenerateRulesForUserInFieldDSO(worksheet, columnLetter, INs, fieldInCell.Trim())
+                            Field = fieldInCell.Trim(),
+                            FieldName = fName,
+                            Priority = priorityValue,
+                            FieldSettings = RulesForUserInFieldDSO.GenerateRulesForUserInFieldDSO(worksheet, columnLetter, INs, fieldInCell.Trim())
                         });
                     }
                 }
@@ -102,12 +101,12 @@ namespace Gena.Modules.MainSheets.DSO
                     var fName = userInFieldSheets.Where(e => e.FieldName == userInFieldCellValue.Trim())?.FirstOrDefault()?.InternalName;
                     if (fName is null) throw new UniversalException($"Поле \"{userInFieldCellValue.Trim()}\" не найдено в списке UserInFields (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}{userInFieldRowNumber}\")");
 
-                    lcForCurrentState.stateSettings[0].userInField.Add(new UserInField
+                    lcForCurrentState.StateSettings[0].UserInField.Add(new UserInField
                     {
-                        field = userInFieldCellValue,
-                        fieldName = fName,
-                        priority = priorityValue,
-                        fieldSettings = RulesForUserInFieldDSO.GenerateRulesForUserInFieldDSO(worksheet, columnLetter, INs, userInFieldCellValue)
+                        Field = userInFieldCellValue,
+                        FieldName = fName,
+                        Priority = priorityValue,
+                        FieldSettings = RulesForUserInFieldDSO.GenerateRulesForUserInFieldDSO(worksheet, columnLetter, INs, userInFieldCellValue)
                     });
                 }
             }
@@ -115,7 +114,7 @@ namespace Gena.Modules.MainSheets.DSO
             //если в одной из ячеек указано ключевое слово Default/По умолчанию, то вызываем генерацию правил для дефолта
             if (userInGroupCellValue == "По умолчанию" || userInFieldCellValue == "По умолчанию" || userInGroupCellValue == "Default" || userInFieldCellValue == "Default")
             {
-                lcForCurrentState.stateSettings[0].fieldSettingsByState = RulesForDefaultDSO.GenerateRulesForDefaultDSO(worksheet, columnLetter, INs);
+                lcForCurrentState.StateSettings[0].FieldSettingsByState = RulesForDefaultDSO.GenerateRulesForDefaultDSO(worksheet, columnLetter, INs);
             }
 
             return lcForCurrentState;

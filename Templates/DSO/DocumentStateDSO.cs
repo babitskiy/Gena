@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace Gena.Templates.DSO
 {
     internal class DocumentStateDSO
     {
-        public int docState { get; set; }
-        public string stateName { get; set; }
-        public List<StateSetting> stateSettings { get; set; }
+
+        [JsonPropertyName("docState")]
+        public int DocState { get; set; }
+
+        [JsonPropertyName("stateName")]
+        public string StateName { get; set; }
+
+        [JsonPropertyName("stateSettings")]
+        public List<StateSetting> StateSettings { get; set; }
     }
 }

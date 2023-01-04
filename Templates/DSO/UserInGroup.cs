@@ -1,16 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace Gena.Templates.DSO
 {
     internal class UserInGroup
     {
-        public int groupId { get; set; }
-        public string groupName { get; set; }
-        public int priority { get; set; }
-        public List<FieldSettingForUserInGroup> fieldSettings { get; set; }
+        [JsonPropertyName("groupId")]
+        public int GroupId { get; set; }
+
+        [JsonPropertyName("groupName")]
+        public string GroupName { get; set; }
+
+        [JsonPropertyName("priority")]
+        public int Priority { get; set; }
+
+        [JsonPropertyName("fieldSettings")]
+        public List<FieldSettingForUserInGroup> FieldSettings { get; set; }
     }
 }

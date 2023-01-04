@@ -1,6 +1,6 @@
-﻿using System.Text.Encodings.Web;
+﻿using Gena.Templates.DSO;
+using System.Text.Encodings.Web;
 using System.Text.Json;
-using Gena.Templates.DSO;
 
 namespace Gena.Serializers
 {
