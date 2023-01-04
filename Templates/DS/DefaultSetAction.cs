@@ -1,21 +1,23 @@
-﻿namespace Gena.Templates.DS
+﻿using System.Xml.Serialization;
+
+namespace Gena.Templates.DS
 {
 
     [Serializable()]
     [System.ComponentModel.DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(AnonymousType = true, Namespace = "http://schemas.conteq.ru/sharepoint/v4/configuration/states")]
+    [XmlType(AnonymousType = true, Namespace = "http://schemas.conteq.ru/sharepoint/v4/configuration/states")]
     public class DefaultSetAction
     {
-        [System.Xml.Serialization.XmlAttribute()]
+        [XmlAttribute()]
         public string ID { get; set; }
 
-        [System.Xml.Serialization.XmlAttribute()]
+        [XmlAttribute()]
         public bool Visible { get; set; }
 
-        [System.Xml.Serialization.XmlAttribute()]
+        [XmlAttribute()]
         public bool Enable { get; set; }
 
-        [System.Xml.Serialization.XmlAttribute()]
+        [XmlAttribute()]
         public bool Force { get; set; }
 
         //конструктор класса
@@ -25,10 +27,10 @@
             switch (parameter)
             {
                 case 0:
-                    Visible = false; Enable = false; Force = true;
+                    Force = true;
                     break;
                 case 1:
-                    Visible = true; Enable = false; Force = true;
+                    Visible = true; Force = true;
                     break;
                 case 2:
                     Visible = true; Enable = true; Force = true;
