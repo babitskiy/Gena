@@ -7,7 +7,7 @@ namespace Gena.Modules.MainSheets.DS
     internal class RulesForDefaultDS
     {
         //метод генерации Default для DocumentState
-        public static Default GenerateRulesForDefaultDS(IXLWorksheet worksheet, string columnLetter, List<InternalNames> INs)
+        public static Default GenerateRulesForDefaultDS(IXLWorksheet worksheet, string columnLetter, List<InternalNames> internalNames)
         {
             var rulesForDefault = new Default()
             {
@@ -21,7 +21,7 @@ namespace Gena.Modules.MainSheets.DS
             };
 
             //for each internalName generate rules in current state
-            foreach (var currentInternalName in INs)
+            foreach (var currentInternalName in internalNames)
             {
                 string? valueInCurrentInternalNameCell = Convert.ToString(currentInternalName.InternalName).Trim();
 

@@ -6,7 +6,7 @@ namespace Gena.Modules.MainSheets.DSO
     internal class RulesForDefaultDSO
     {
         //метод генерации Default для DocumentState
-        public static List<FieldSettingsByState> GenerateRulesForDefaultDSO(IXLWorksheet worksheet, string columnLetter, List<InternalNames> INs)
+        public static List<FieldSettingsByState> GenerateRulesForDefaultDSO(IXLWorksheet worksheet, string columnLetter, List<InternalNames> internalNames)
         {
             //создаём экземпляр дефолта
             var rulesForDefault = new List<FieldSettingsByState>();
@@ -14,7 +14,7 @@ namespace Gena.Modules.MainSheets.DSO
             string currentTypeOfObject = "Поля";
 
             //for each internalName generate rules in current state
-            foreach (var currentInternalName in INs)
+            foreach (var currentInternalName in internalNames)
             {
 
                 string? valueInCurrentInternalNameCell = Convert.ToString(currentInternalName.InternalName);

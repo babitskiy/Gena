@@ -8,7 +8,7 @@ namespace Gena.Modules.MainSheets.DSO
     internal class RulesForDocumentStateDSO
     {
         //метод обновления существующего StateSettings
-        public static T CreateRulesForDocumentStateDSO<T>(IXLWorksheet worksheet, string columnLetter, string tempStateName, int currentStateID, List<InternalNames> INs, T lcForCurrentState, List<SheetUserInFields> userInFieldSheets, List<SheetGroups> GroupsSheetList, int userInGroupRowNumber, int userInFieldRowNumber, int priorityRowNumber) where T : DocumentStateDSO, new()
+        public static T CreateRulesForDocumentStateDSO<T>(IXLWorksheet worksheet, string columnLetter, string tempStateName, int currentStateID, List<InternalNames> internalNames, T lcForCurrentState, List<SheetUserInFields> userInFieldSheets, List<SheetGroups> GroupsSheetList, int userInGroupRowNumber, int userInFieldRowNumber, int priorityRowNumber) where T : DocumentStateDSO, new()
         {
             if (lcForCurrentState == null)
             {
@@ -33,8 +33,10 @@ namespace Gena.Modules.MainSheets.DSO
             var userInFieldCellValue = (string)worksheet.Cell(userInFieldRowNumber, columnLetter).Value;
 
             var checkPriorityValue = int.TryParse(worksheet.Cell(priorityRowNumber, columnLetter).Value.ToString(), out var priorityValue);
-            if (priorityValue > 100) throw new UniversalException($"Значение приоритета не может быть больше чем 100 (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}{priorityRowNumber}\")");
-            if (priorityValue < 0) throw new UniversalException($"Значение приоритета не может быть отрицательным числом (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}{priorityRowNumber}\")");
+            if (priorityValue > 100) 
+                throw new UniversalException($"Значение приоритета не может быть больше чем 100 (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}{priorityRowNumber}\")");
+            if (priorityValue < 0) 
+                throw new UniversalException($"Значение приоритета не может быть отрицательным числом (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}{priorityRowNumber}\")");
 
             //если ячейка UserInGroup заполнена то вызываем генерацию правил для неё
             if (userInGroupCellValue != "" && userInGroupCellValue != "По умолчанию" && userInGroupCellValue != "Default") //проверяем есть ли в этой колонке правила для userInRoles
@@ -46,30 +48,32 @@ namespace Gena.Modules.MainSheets.DSO
                     foreach (var groupInCell in groupsInCell)
                     {
                         //проверяем есть ли такая группа в списке UserInGroups, если нет - выводим ошибку
-                        var gId = GroupsSheetList.Where(e => e.GroupName == groupInCell.Trim())?.FirstOrDefault()?.GroupId ?? 0;
-                        if (gId == 0) throw new UniversalException($"Группа \"{groupInCell.Trim()}\" не найдена в списке UserInGroups (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}{userInGroupRowNumber}\")");
+                        var gId = GroupsSheetList.FirstOrDefault(e => e.GroupName == groupInCell.Trim())?.GroupId ?? 0;
+                        if (gId == 0) 
+                            throw new UniversalException($"Группа \"{groupInCell.Trim()}\" не найдена в списке UserInGroups (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}{userInGroupRowNumber}\")");
 
                         lcForCurrentState.StateSettings[0].UserInGroup.Add(new UserInGroup
                         {
                             GroupId = gId,
                             GroupName = groupInCell.Trim(),
                             Priority = priorityValue,
-                            FieldSettings = RulesForUserInGroup.GenerateRulesForUserInGroup(worksheet, columnLetter, INs, groupInCell.Trim())
+                            FieldSettings = RulesForUserInGroup.GenerateRulesForUserInGroup(worksheet, columnLetter, internalNames, groupInCell.Trim())
                         });
                     }
                 }
                 else
                 {
                     //проверяем есть ли такая группа в списке UserInGroups, если нет - выводим ошибку
-                    var gId = GroupsSheetList.Where(e => e.GroupName == userInGroupCellValue.Trim())?.FirstOrDefault()?.GroupId ?? 0;
-                    if (gId == 0) throw new UniversalException($"Группа \"{userInGroupCellValue.Trim()}\" не найдена в списке UserInGroups (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}{userInGroupRowNumber}\")");
+                    var gId = GroupsSheetList.FirstOrDefault(e => e.GroupName == userInGroupCellValue.Trim())?.GroupId ?? 0;
+                    if (gId == 0) 
+                        throw new UniversalException($"Группа \"{userInGroupCellValue.Trim()}\" не найдена в списке UserInGroups (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}{userInGroupRowNumber}\")");
 
                     lcForCurrentState.StateSettings[0].UserInGroup.Add(new UserInGroup
                     {
                         GroupId = gId,
                         GroupName = userInGroupCellValue,
                         Priority = priorityValue,
-                        FieldSettings = RulesForUserInGroup.GenerateRulesForUserInGroup(worksheet, columnLetter, INs, userInGroupCellValue)
+                        FieldSettings = RulesForUserInGroup.GenerateRulesForUserInGroup(worksheet, columnLetter, internalNames, userInGroupCellValue)
                     });
                 }
             }
@@ -83,30 +87,32 @@ namespace Gena.Modules.MainSheets.DSO
                     foreach (var fieldInCell in fieldsInCell)
                     {
                         //проверяем есть ли такое поле в списке UserInFields, если нет - выводим ошибку
-                        var fName = userInFieldSheets.Where(e => e.FieldName == fieldInCell.Trim())?.FirstOrDefault()?.InternalName;
-                        if (fName is null) throw new UniversalException($"Поле {fieldInCell.Trim()} не найдено в списке UserInFields (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}{userInFieldRowNumber}\")");
+                        var fName = userInFieldSheets.FirstOrDefault(e => e.FieldName == fieldInCell.Trim())?.InternalName;
+                        if (fName is null) 
+                            throw new UniversalException($"Поле {fieldInCell.Trim()} не найдено в списке UserInFields (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}{userInFieldRowNumber}\")");
 
                         lcForCurrentState.StateSettings[0].UserInField.Add(new UserInField
                         {
                             Field = fieldInCell.Trim(),
                             FieldName = fName,
                             Priority = priorityValue,
-                            FieldSettings = RulesForUserInFieldDSO.GenerateRulesForUserInFieldDSO(worksheet, columnLetter, INs, fieldInCell.Trim())
+                            FieldSettings = RulesForUserInFieldDSO.GenerateRulesForUserInFieldDSO(worksheet, columnLetter, internalNames, fieldInCell.Trim())
                         });
                     }
                 }
                 else
                 {
                     //проверяем есть ли такое поле в списке UserInFields, если нет - выводим ошибку
-                    var fName = userInFieldSheets.Where(e => e.FieldName == userInFieldCellValue.Trim())?.FirstOrDefault()?.InternalName;
-                    if (fName is null) throw new UniversalException($"Поле \"{userInFieldCellValue.Trim()}\" не найдено в списке UserInFields (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}{userInFieldRowNumber}\")");
+                    var fName = userInFieldSheets.FirstOrDefault(e => e.FieldName == userInFieldCellValue.Trim())?.InternalName;
+                    if (fName is null) 
+                        throw new UniversalException($"Поле \"{userInFieldCellValue.Trim()}\" не найдено в списке UserInFields (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}{userInFieldRowNumber}\")");
 
                     lcForCurrentState.StateSettings[0].UserInField.Add(new UserInField
                     {
                         Field = userInFieldCellValue,
                         FieldName = fName,
                         Priority = priorityValue,
-                        FieldSettings = RulesForUserInFieldDSO.GenerateRulesForUserInFieldDSO(worksheet, columnLetter, INs, userInFieldCellValue)
+                        FieldSettings = RulesForUserInFieldDSO.GenerateRulesForUserInFieldDSO(worksheet, columnLetter, internalNames, userInFieldCellValue)
                     });
                 }
             }
@@ -114,7 +120,7 @@ namespace Gena.Modules.MainSheets.DSO
             //если в одной из ячеек указано ключевое слово Default/По умолчанию, то вызываем генерацию правил для дефолта
             if (userInGroupCellValue == "По умолчанию" || userInFieldCellValue == "По умолчанию" || userInGroupCellValue == "Default" || userInFieldCellValue == "Default")
             {
-                lcForCurrentState.StateSettings[0].FieldSettingsByState = RulesForDefaultDSO.GenerateRulesForDefaultDSO(worksheet, columnLetter, INs);
+                lcForCurrentState.StateSettings[0].FieldSettingsByState = RulesForDefaultDSO.GenerateRulesForDefaultDSO(worksheet, columnLetter, internalNames);
             }
 
             return lcForCurrentState;

@@ -7,7 +7,7 @@ namespace Gena.Modules.MainSheets.DS
     internal class RulesForUserInRole
     {
         //метод генерации Case для UserInRole для DocumentState
-        public static Case GenerateRulesForUserInRoles(IXLWorksheet worksheet, string columnLetter, List<InternalNames> INs, string userInRolePointer)
+        public static Case GenerateRulesForUserInRoles(IXLWorksheet worksheet, string columnLetter, List<InternalNames> internalNames, string userInRolePointer)
         {
             //создаём экземпляр Case
             var rulesForUserInRoles = new Case()
@@ -23,7 +23,7 @@ namespace Gena.Modules.MainSheets.DS
             };
 
             //for each internalName generate rules in current state
-            foreach (var currentInternalName in INs)
+            foreach (var currentInternalName in internalNames)
             {
                 string? valueInCurrentInternalNameCell = Convert.ToString(currentInternalName.InternalName).Trim();
 

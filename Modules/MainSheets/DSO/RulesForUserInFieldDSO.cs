@@ -6,7 +6,7 @@ namespace Gena.Modules.MainSheets.DSO
     internal class RulesForUserInFieldDSO
     {
         //метод генерации правил для UserInGroup
-        public static List<FieldSettingForUserInField> GenerateRulesForUserInFieldDSO(IXLWorksheet worksheet, string columnLetter, List<InternalNames> INs, string userInRolePointer)
+        public static List<FieldSettingForUserInField> GenerateRulesForUserInFieldDSO(IXLWorksheet worksheet, string columnLetter, List<InternalNames> internalNames, string userInRolePointer)
         {
             //создаём экземпляр правил для пользователя в группе
             var rulesForUserInRoles = new List<FieldSettingForUserInField>();
@@ -14,7 +14,7 @@ namespace Gena.Modules.MainSheets.DSO
             string currentTypeOfObject = "Поля";
 
             //for each internalName generate rules in current state
-            foreach (var currentInternalName in INs)
+            foreach (var currentInternalName in internalNames)
             {
 
                 string? valueInCurrentInternalNameCell = Convert.ToString(currentInternalName.InternalName);

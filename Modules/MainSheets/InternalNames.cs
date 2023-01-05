@@ -15,8 +15,9 @@ namespace Gena.Modules.MainSheets
         public static List<InternalNames> GenerateInternalNamesSheetList(IXLWorksheet worksheet)
         {
             //находим букву столбца с internalNames
-            var internalNamesColumnNumber = worksheet.FirstRowUsed().Cells().Where(e => e?.Value?.ToString()?.Trim().ToUpper() == "internalNames".ToUpper())?.FirstOrDefault()?.Address.ColumnLetter;
-            if (internalNamesColumnNumber is null) throw new UniversalException($"В таблице \"{worksheet.Name}\" не найдена колонка internalNames");
+            var internalNamesColumnNumber = worksheet.FirstRowUsed().Cells().FirstOrDefault(e => e?.Value?.ToString()?.Trim().ToUpper() == "internalNames".ToUpper())?.Address.ColumnLetter;
+            if (internalNamesColumnNumber is null) 
+                throw new UniversalException($"В таблице \"{worksheet.Name}\" не найдена колонка internalNames");
 
             //собираем всё что есть в колонке InternalNames в текущей таблице
             var internalNamesFromCurrentSheet = worksheet.Column(internalNamesColumnNumber).Cells().Skip(1).Select((v, i) => new
@@ -25,16 +26,16 @@ namespace Gena.Modules.MainSheets
                 Index = i + 1,
                 v.Address
             });
-            List<InternalNames> INs = new List<InternalNames>();
+            List<InternalNames> internalNames = new List<InternalNames>();
             foreach (var item in internalNamesFromCurrentSheet)
             {
-                INs.Add(new InternalNames()
+                internalNames.Add(new InternalNames()
                 {
                     RowNumber = item.Address.RowNumber,
                     InternalName = (string)item.Value
                 });
             }
-            return INs;
+            return internalNames;
         }
     }
 }

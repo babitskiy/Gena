@@ -15,23 +15,24 @@ namespace Gena.SystemSheets
         public static List<SheetStates> GenerateSheetStatesList(IXLWorkbook workbook)
         {
             //создаём список состояний из листа States
-            var worksheetStates = workbook.Worksheets.Where(w => w.Name == "States")?.FirstOrDefault();
-            if (worksheetStates is null) throw new UniversalException($"Системный список States не найден");
-            var StatesList = worksheetStates.RowsUsed().Skip(1).Select(row => new
+            var worksheetStates = workbook.Worksheets.FirstOrDefault(w => w.Name == "States");
+            if (worksheetStates is null) 
+                throw new UniversalException($"Системный список States не найден");
+            var statesList = worksheetStates.RowsUsed().Skip(1).Select(row => new
             {
                 StateId = row.Cell(1).Value,
                 StateName = row.Cell(2).Value
             });
-            List<SheetStates> StatesSheetList = new List<SheetStates>();
-            foreach (var item in StatesList)
+            List<SheetStates> statesSheetList = new List<SheetStates>();
+            foreach (var item in statesList)
             {
-                StatesSheetList.Add(new SheetStates()
+                statesSheetList.Add(new SheetStates()
                 {
                     StateId = Convert.ToInt32(item.StateId),
                     StateName = item.StateName.ToString()
                 });
             }
-            return StatesSheetList;
+            return statesSheetList;
         }
     }
 }

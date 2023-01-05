@@ -11,7 +11,7 @@ namespace Gena.SystemSheets
         public static List<SheetSettings> GenerateSheetSettingsList(IXLWorkbook workbook)
         {
             //создаём список состояний из листа States
-            var worksheetSettings = workbook.Worksheets.Where(w => w.Name == "Settings").FirstOrDefault();
+            var worksheetSettings = workbook.Worksheets.FirstOrDefault(w => w.Name == "Settings");
             var SettingsList = worksheetSettings?.RowsUsed().Skip(1).Select(row => new
             {
                 Name = row.Cell(1).Value,

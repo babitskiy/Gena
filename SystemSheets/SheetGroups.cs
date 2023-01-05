@@ -15,8 +15,9 @@ namespace Gena.SystemSheets
         public static List<SheetGroups> GenerateGroupSheetList(IXLWorkbook workbook)
         {
             //создаём список полей из листа Groups
-            var worksheetGroups = workbook.Worksheets.Where(w => w.Name == "Groups")?.FirstOrDefault();
-            if (worksheetGroups is null) throw new UniversalException($"Системный список Groups не найден");
+            var worksheetGroups = workbook.Worksheets.FirstOrDefault(w => w.Name == "Groups");
+            if (worksheetGroups is null) 
+                throw new UniversalException($"Системный список Groups не найден");
             var GroupsList = worksheetGroups.RowsUsed().Skip(1).Select(row => new
             {
                 GroupId = row.Cell(1).Value,

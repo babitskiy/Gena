@@ -7,7 +7,7 @@ namespace Gena.Modules.MainSheets.DS
     internal class RulesForUserInFieldDS
     {
         //метод генерации Case для UserInField для DocumentState
-        public static Case GenerateRulesForUserInFieldDS(IXLWorksheet worksheet, string columnLetter, List<InternalNames> INs, string userInFieldPointer)
+        public static Case GenerateRulesForUserInFieldDS(IXLWorksheet worksheet, string columnLetter, List<InternalNames> internalNames, string userInFieldPointer)
         {
             //создаём экземпляр Case
             var rulesForUserInField = new Case()
@@ -23,7 +23,7 @@ namespace Gena.Modules.MainSheets.DS
             };
 
             //for each internalName generate rules in current state
-            foreach (var currentInternalName in INs)
+            foreach (var currentInternalName in internalNames)
             {
                 string? valueInCurrentInternalNameCell = Convert.ToString(currentInternalName.InternalName).Trim();
 

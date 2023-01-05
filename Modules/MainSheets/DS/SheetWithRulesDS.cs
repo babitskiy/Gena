@@ -10,7 +10,7 @@ namespace Gena.Modules.MainSheets.DS
         public static T GenerateLifeCycleForSheetWithRulesDS<T>(IXLWorksheet worksheet, List<SheetStates> StatesSheetList, List<SheetUserInFields> UserInFieldsSheetList, List<SheetUserInRoles> UserInRolesSheetList) where T : StatesConfiguration, new()
         {
             //генерируем список всех intrnalName'ов в таблице с описанием жц
-            var INs = InternalNames.GenerateInternalNamesSheetList(worksheet);
+            var internalNames = InternalNames.GenerateInternalNamesSheetList(worksheet);
 
             //собираем все колонки с правилами для состояний, т.е. начиная с третей
             var columnsWithRules = ColumnsWithRules.GenerateColumnsWithRulesList(worksheet);
@@ -22,18 +22,20 @@ namespace Gena.Modules.MainSheets.DS
             };
 
             //Проверяем что в текущей таблице существует строка userInGroup
-            var userInRolesRowNumber = worksheet.FirstColumnUsed().Cells().Where(e => e.Value.ToString().Trim().ToUpper() == "userInRoles".ToUpper())?.FirstOrDefault()?.Address.RowNumber ?? 0;
-            if (userInRolesRowNumber == 0) throw new UniversalException($"В таблице \"{worksheet.Name}\" отсутствует строка userInRoles");
+            var userInRolesRowNumber = worksheet.FirstColumnUsed().Cells().FirstOrDefault(e => e.Value.ToString().Trim().ToUpper() == "userInRoles".ToUpper())?.Address.RowNumber ?? 0;
+            if (userInRolesRowNumber == 0) 
+                throw new UniversalException($"В таблице \"{worksheet.Name}\" отсутствует строка userInRoles");
 
             //Проверяем что в текущей таблице существует строка userInField
-            var userInFieldRowNumber = worksheet.FirstColumnUsed().Cells().Where(e => e.Value.ToString().Trim().ToUpper() == "userInField".ToUpper())?.FirstOrDefault()?.Address.RowNumber ?? 0;
-            if (userInFieldRowNumber == 0) throw new UniversalException($"В таблице \"{worksheet.Name}\" отсутствует строка userInField");
+            var userInFieldRowNumber = worksheet.FirstColumnUsed().Cells().FirstOrDefault(e => e.Value.ToString().Trim().ToUpper() == "userInField".ToUpper())?.Address.RowNumber ?? 0;
+            if (userInFieldRowNumber == 0) 
+                throw new UniversalException($"В таблице \"{worksheet.Name}\" отсутствует строка userInField");
 
             //for each state generate rules
             foreach (var columnWithRules in columnsWithRules)
             {
                 //находим айди этого состояния в списке состояний
-                int currentStateID = Convert.ToInt32(StatesSheetList.Where(e => e.StateName == columnWithRules.StateName.Trim()).First().StateId);
+                int currentStateID = Convert.ToInt32(StatesSheetList?.FirstOrDefault(e => e.StateName == columnWithRules.StateName.Trim()).StateId);
 
                 //Объявляем переменную DocumentState
                 var lcForCurrentState = new DocumentState();
@@ -43,12 +45,12 @@ namespace Gena.Modules.MainSheets.DS
                 {
                     lcForCurrentState = lc.DocumentStates.SingleOrDefault(e => e.ID == currentStateID);
                     //lcForCurrentState = CreateRulesForExistState<DocumentState>(worksheet, columnWithRules.Address.ColumnLetter, currentStateID, INs, lcForCurrentState);
-                    lcForCurrentState = RulesForDocumentStateDS.CreateRulesForDocumentStateDS<DocumentState>(worksheet, columnWithRules.Address.ColumnLetter, columnWithRules.StateName, currentStateID, INs, lcForCurrentState, UserInFieldsSheetList, UserInRolesSheetList, userInRolesRowNumber, userInFieldRowNumber);
+                    lcForCurrentState = RulesForDocumentStateDS.CreateRulesForDocumentStateDS<DocumentState>(worksheet, columnWithRules.Address.ColumnLetter, columnWithRules.StateName, currentStateID, internalNames, lcForCurrentState, UserInFieldsSheetList, UserInRolesSheetList, userInRolesRowNumber, userInFieldRowNumber);
                 }
                 else
                 {
                     //lcForCurrentState = CreateRulesForNewState<DocumentState>(worksheet, columnWithRules.Address.ColumnLetter, tempStateName, currentStateID, INs);
-                    lcForCurrentState = RulesForDocumentStateDS.CreateRulesForDocumentStateDS<DocumentState>(worksheet, columnWithRules.Address.ColumnLetter, columnWithRules.StateName, currentStateID, INs, null, UserInFieldsSheetList, UserInRolesSheetList, userInRolesRowNumber, userInFieldRowNumber);
+                    lcForCurrentState = RulesForDocumentStateDS.CreateRulesForDocumentStateDS<DocumentState>(worksheet, columnWithRules.Address.ColumnLetter, columnWithRules.StateName, currentStateID, internalNames, null, UserInFieldsSheetList, UserInRolesSheetList, userInRolesRowNumber, userInFieldRowNumber);
                     lc.DocumentStates.Add(lcForCurrentState);
                 }
             }

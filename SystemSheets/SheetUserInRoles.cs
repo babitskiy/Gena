@@ -12,15 +12,17 @@ namespace Gena.SystemSheets
         public static List<SheetUserInRoles> GenerateUserInRolesSheetList(IXLWorkbook workbook)
         {
             //создаём список полей из листа Groups
-            var worksheetUserInRoles = workbook.Worksheets.Where(w => w.Name == "UserInRoles")?.FirstOrDefault();
-            if (worksheetUserInRoles is null) throw new UniversalException($"Системный список UserInRoles не найден");
-            var GroupsList = worksheetUserInRoles.RowsUsed().Skip(1).Select(row => new
+            var worksheetUserInRoles = workbook.Worksheets.FirstOrDefault(w => w.Name == "UserInRoles");
+            //проверяем есть ли такой лист в экселе, если нет - возвращаем ошибку
+            if (worksheetUserInRoles is null) 
+                throw new UniversalException($"Системный список UserInRoles не найден");
+            var groupsList = worksheetUserInRoles.RowsUsed().Skip(1).Select(row => new
             {
                 RoleInternalName = row.Cell(1).Value,
                 RoleName = row.Cell(2).Value
             });
             List<SheetUserInRoles> UserInRolesSheetList = new List<SheetUserInRoles>();
-            foreach (var item in GroupsList)
+            foreach (var item in groupsList)
             {
                 UserInRolesSheetList.Add(new SheetUserInRoles()
                 {
