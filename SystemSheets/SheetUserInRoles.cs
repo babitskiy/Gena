@@ -16,21 +16,21 @@ namespace Gena.SystemSheets
             //проверяем есть ли такой лист в экселе, если нет - возвращаем ошибку
             if (worksheetUserInRoles is null) 
                 throw new UniversalException($"Системный список UserInRoles не найден");
-            var groupsList = worksheetUserInRoles.RowsUsed().Skip(1).Select(row => new
+
+
+            List<SheetUserInRoles> userInRolesSheetList = new List<SheetUserInRoles>();
+
+            var roles = worksheetUserInRoles.RowsUsed().Skip(1).Select(row => new SheetUserInRoles()
             {
-                RoleInternalName = row.Cell(1).Value,
-                RoleName = row.Cell(2).Value
+                RoleInternalName = row.Cell(1).Value.ToString().Trim(),
+                RoleName = row.Cell(2).Value.ToString().Trim()
             });
-            List<SheetUserInRoles> UserInRolesSheetList = new List<SheetUserInRoles>();
-            foreach (var item in groupsList)
+
+            foreach (var role in roles)
             {
-                UserInRolesSheetList.Add(new SheetUserInRoles()
-                {
-                    RoleInternalName = item.RoleInternalName.ToString(),
-                    RoleName = item.RoleName.ToString()
-                });
+                userInRolesSheetList.Add(role);
             }
-            return UserInRolesSheetList;
+            return userInRolesSheetList;
         }
     }
 }
