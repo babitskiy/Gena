@@ -6,6 +6,7 @@ namespace Gena
     public partial class Gena : Form
     {
         bool canStart = false; //определяет можно ли запускать генерацию
+        bool _inSingleLine = false; //при выборе данного чекбокса жц будет сериализован в одну строку
         string? systemType = null; //определяет тип системы DS/DSO
 
         public Gena()
@@ -69,7 +70,7 @@ namespace Gena
 
                     try
                     {
-                        if (LifeCycleGenerator.GenerateLifeCycle(openFileDialog1.FileName, pathToFolderWithLCFiles, systemType))
+                        if (LifeCycleGenerator.GenerateLifeCycle(openFileDialog1.FileName, pathToFolderWithLCFiles, systemType, _inSingleLine))
                         {
                             addFromNewLine(@"Жц сгенерирован успешно", Color.Green);
                         }
@@ -108,6 +109,9 @@ namespace Gena
         {
             //при выборе радио-кнопки DSO, записываем DSO в переменную
             systemType = radioButton_DSO.Checked ? "DSO" : null;
+
+            //если выбран DSO, то будет отображаться чекбокс "В одну строку"
+            inSingleLineDSO.Visible = radioButton_DSO.Checked;
         }
 
         private void richTextBox_Logs_TextChanged(object sender, EventArgs e)
@@ -123,6 +127,11 @@ namespace Gena
         private void Gena_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void checkBox_inSingleLineDSO_CheckedChanged(object sender, EventArgs e)
+        {
+            _inSingleLine = inSingleLineDSO.Checked;
         }
     }
 }

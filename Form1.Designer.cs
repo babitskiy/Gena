@@ -35,6 +35,7 @@
             this.richTextBox_Logs = new System.Windows.Forms.RichTextBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.label1 = new System.Windows.Forms.Label();
+            this.inSingleLineDSO = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // btnChooseExcelFile
@@ -112,11 +113,24 @@
             this.label1.Text = "Файл не выбран";
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
+            // inSingleLineDSO
+            // 
+            this.inSingleLineDSO.AutoSize = true;
+            this.inSingleLineDSO.Location = new System.Drawing.Point(60, 49);
+            this.inSingleLineDSO.Name = "inSingleLineDSO";
+            this.inSingleLineDSO.Size = new System.Drawing.Size(102, 19);
+            this.inSingleLineDSO.TabIndex = 6;
+            this.inSingleLineDSO.Text = "В одну строку";
+            this.inSingleLineDSO.UseVisualStyleBackColor = true;
+            this.inSingleLineDSO.Visible = false;
+            this.inSingleLineDSO.CheckedChanged += new System.EventHandler(this.checkBox_inSingleLineDSO_CheckedChanged);
+            // 
             // Gena
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(634, 364);
+            this.Controls.Add(this.inSingleLineDSO);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.richTextBox_Logs);
             this.Controls.Add(this.radioButton_DSO);
@@ -128,7 +142,7 @@
             this.MaximizeBox = false;
             this.Name = "Gena";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Gena - 1.0.0";
+            this.Text = "Gena - 1.0.1";
             this.Load += new System.EventHandler(this.Gena_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -144,5 +158,6 @@
         private OpenFileDialog openFileDialog1;
         private Label label1;
         private RichTextBox richTextBox_Logs;
+        private CheckBox inSingleLineDSO;
     }
 }

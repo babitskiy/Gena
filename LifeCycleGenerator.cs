@@ -10,7 +10,7 @@ namespace Gena
 {
     internal class LifeCycleGenerator
     {
-        public static bool GenerateLifeCycle(string excelFilePath, string pathToFolderWithLCFiles, string systemType)
+        public static bool GenerateLifeCycle(string excelFilePath, string pathToFolderWithLCFiles, string systemType, bool inSingleLine)
         {
             //открываем эксель-файл
             using (IXLWorkbook workbook = new XLWorkbook(excelFilePath))
@@ -36,7 +36,7 @@ namespace Gena
                         if (!(systemWorksheets != null && systemWorksheets.Any(e => e == worksheet.Name)) && worksheet.Name != "States" && worksheet.Name != "Groups" && worksheet.Name != "Fields" && worksheet.Name != "UserInFields" && worksheet.Name != "Settings")
                         {
                             var lc = SheetWithRulesDSO.GenerateLifeCycleForSheetWithRulesDSO<List<DocumentStateDSO>>(worksheet, statesSheetList, userInFieldsSheetList, GroupsSheetList);
-                            DSOSerializer.StartDSOSerializer(pathToFolderWithLCFiles + "\\" + worksheet.Name, lc);
+                            DSOSerializer.StartDSOSerializer(pathToFolderWithLCFiles + "\\" + worksheet.Name, lc, inSingleLine);
                         }
                     }
                 }

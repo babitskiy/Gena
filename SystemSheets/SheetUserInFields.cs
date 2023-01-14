@@ -5,8 +5,6 @@ namespace Gena.SystemSheets
 {
     internal class SheetUserInFields
     {
-        private string internalName;
-        private string fieldName;
         public string InternalName { get; set; }
         public string FieldName { get; set; }
 
