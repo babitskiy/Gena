@@ -38,7 +38,7 @@ namespace Gena.Modules.MainSheets.DSO
                 }
 
 
-                if (valueInCurrentInternalNameCell != "" && valueInCurrentInternalNameCell != null && valueInCurrentInternalNameCell != "Поля" && valueInCurrentInternalNameCell != "Кнопки" && valueInCurrentInternalNameCell != "Вкладки" && valueInCurrentInternalNameCell != "internalNames")
+                if (valueInCurrentInternalNameCell.Trim() != "" && valueInCurrentInternalNameCell.Trim() != null && valueInCurrentInternalNameCell.Trim() != "Поля" && valueInCurrentInternalNameCell.Trim() != "Кнопки" && valueInCurrentInternalNameCell.Trim() != "Вкладки" && valueInCurrentInternalNameCell.Trim() != "internalNames")
                 {
                     int valueInCell = Convert.ToInt32(worksheet.Cell(currentInternalName.RowNumber, columnLetter).Value);
                     switch (currentTypeOfObject)

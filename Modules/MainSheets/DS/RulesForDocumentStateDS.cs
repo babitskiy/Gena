@@ -37,7 +37,7 @@ namespace Gena.Modules.MainSheets.DS
             var userInFieldCellValue = (string)worksheet.Cell(userInFieldRowNumber, columnLetter).Value;
 
             //если ячейка UserInGroup заполнена то вызываем генерацию правил для неё
-            if (userInRoleCellValue != "" && userInRoleCellValue != "По умолчанию" && userInRoleCellValue != "Default") //проверяем есть ли в этой колонке правила для userInRoles
+            if (userInRoleCellValue.Trim() != "" && userInRoleCellValue.Trim() != "По умолчанию" && userInRoleCellValue.Trim() != "Default") //проверяем есть ли в этой колонке правила для userInRoles
             {
                 //проверяем указано ли в ячейке UserInGroup несколько групп, и если это так, то создаём жц для каждой
                 if (userInRoleCellValue.Contains(';'))
@@ -69,7 +69,7 @@ namespace Gena.Modules.MainSheets.DS
             }
 
             //если ячейка UserInField заполнена то вызываем генерацию правил для неё
-            if (userInFieldCellValue != "" && userInFieldCellValue != "По умолчанию" && userInFieldCellValue != "Default") //проверяем есть ли в этой колонке правила для userInField
+            if (userInFieldCellValue.Trim() != "" && userInFieldCellValue != "По умолчанию" && userInFieldCellValue != "Default") //проверяем есть ли в этой колонке правила для userInField
             {
                 if (userInFieldCellValue.Contains(';'))
                 {

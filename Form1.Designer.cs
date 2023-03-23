@@ -142,7 +142,7 @@
             this.MaximizeBox = false;
             this.Name = "Gena";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Gena - 1.0.1";
+            this.Text = "Gena - 1.0.2";
             this.Load += new System.EventHandler(this.Gena_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

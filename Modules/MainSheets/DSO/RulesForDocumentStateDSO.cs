@@ -39,7 +39,7 @@ namespace Gena.Modules.MainSheets.DSO
                 throw new UniversalException($"Значение приоритета не может быть отрицательным числом (лист - \"{worksheet.Name.Trim()}\"; ячейка - \"{columnLetter}{priorityRowNumber}\")");
 
             //если ячейка UserInGroup заполнена то вызываем генерацию правил для неё
-            if (userInGroupCellValue != "" && userInGroupCellValue != "По умолчанию" && userInGroupCellValue != "Default") //проверяем есть ли в этой колонке правила для userInRoles
+            if (userInGroupCellValue.Trim() != "" && userInGroupCellValue.Trim() != "По умолчанию" && userInGroupCellValue.Trim() != "Default") //проверяем есть ли в этой колонке правила для userInRoles
             {
                 //проверяем указано ли в ячейке UserInGroup несколько групп, и если это так, то создаём жц для каждой
                 if (userInGroupCellValue.Contains(';'))
@@ -79,7 +79,7 @@ namespace Gena.Modules.MainSheets.DSO
             }
 
             //если ячейка UserInField заполнена то вызываем генерацию правил для неё
-            if (userInFieldCellValue != "" && userInFieldCellValue != "По умолчанию" && userInFieldCellValue != "Default") //проверяем есть ли в этой колонке правила для userInField
+            if (userInFieldCellValue.Trim() != "" && userInFieldCellValue != "По умолчанию" && userInFieldCellValue != "Default") //проверяем есть ли в этой колонке правила для userInField
             {
                 if (userInFieldCellValue.Contains(';'))
                 {
