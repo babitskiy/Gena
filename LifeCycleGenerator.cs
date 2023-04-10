@@ -1,32 +1,29 @@
 ﻿using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Math;
-using DocumentFormat.OpenXml.Spreadsheet;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Gena.Modules.MainSheets.DS;
+using Gena.Modules.MainSheets.DSO;
+using Gena.Serializers;
+using Gena.SystemSheets;
+using Gena.Templates.DS;
+using Gena.Templates.DSO;
 
 namespace Gena
 {
     internal class LifeCycleGenerator
     {
-        public static bool GenerateLifeCycle(string excelFilePath, string pathToFolderWithLCFiles, string systemType)
+        public static bool GenerateLifeCycle(string excelFilePath, string pathToFolderWithLCFiles, string systemType, bool inSingleLine)
         {
             //открываем эксель-файл
             using (IXLWorkbook workbook = new XLWorkbook(excelFilePath))
             {
                 //создаём список состояний из таблицы States
-                var StatesSheetList = SheetStates.GenerateSheetStatesList(workbook);
+                var statesSheetList = SheetStates.GenerateSheetStatesList(workbook);
 
                 //генерируем список всех групп из таблицы UserInFields
-                var UserInFieldsSheetList = SheetUserInFields.GenerateUserInFieldSheetList(workbook);
+                var userInFieldsSheetList = SheetUserInFields.GenerateUserInFieldSheetList(workbook);
 
                 //генерируем список всех настроек из таблицы Settings
-                var SettingsSheetList = SheetSettings.GenerateSheetSettingsList(workbook);
-                var SystemWorksheets = SettingsSheetList.Where(e => e?.Name?.Trim() == "SystemWorksheets").FirstOrDefault()?.Rule?.Split(';', StringSplitOptions.TrimEntries);
-
+                var settingsSheetList = SheetSettings.GenerateSheetSettingsList(workbook);
+                var systemWorksheets = settingsSheetList.FirstOrDefault(e => e?.Name?.Trim() == "SystemWorksheets")?.Rule?.Split(';', StringSplitOptions.TrimEntries);
 
                 if(systemType == "DSO")
                 {
@@ -36,10 +33,10 @@ namespace Gena
                     foreach (var worksheet in workbook.Worksheets)
                     {
                         //отбрасываем системные листы экселя
-                        if (!(SystemWorksheets != null && SystemWorksheets.Any(e => e == worksheet.Name)) && worksheet.Name != "States" && worksheet.Name != "Groups" && worksheet.Name != "Fields" && worksheet.Name != "UserInFields" && worksheet.Name != "Settings")
+                        if (!(systemWorksheets != null && systemWorksheets.Any(e => e == worksheet.Name)) && worksheet.Name != "States" && worksheet.Name != "Groups" && worksheet.Name != "Fields" && worksheet.Name != "UserInFields" && worksheet.Name != "Settings")
                         {
-                            var lc = SheetWithRulesDSO.GenerateLifeCycleForSheetWithRulesDSO<List<DocumentStateDSO>>(worksheet, StatesSheetList, UserInFieldsSheetList, GroupsSheetList);
-                            DSOSerializer.StartDSOSerializer(pathToFolderWithLCFiles + "\\" + worksheet.Name, lc);
+                            var lc = SheetWithRulesDSO.GenerateLifeCycleForSheetWithRulesDSO<List<DocumentStateDSO>>(worksheet, statesSheetList, userInFieldsSheetList, GroupsSheetList);
+                            DSOSerializer.StartDSOSerializer(pathToFolderWithLCFiles + "\\" + worksheet.Name, lc, inSingleLine);
                         }
                     }
                 }
@@ -51,9 +48,9 @@ namespace Gena
                     foreach (var worksheet in workbook.Worksheets)
                     {
                         //отбрасываем системные листы экселя
-                        if (!(SystemWorksheets != null && SystemWorksheets.Any(e => e == worksheet.Name)) && worksheet.Name != "States" && worksheet.Name != "UserInRoles" && worksheet.Name != "Fields" && worksheet.Name != "UserInFields" && worksheet.Name != "Settings")
+                        if (!(systemWorksheets != null && systemWorksheets.Any(e => e == worksheet.Name)) && worksheet.Name != "States" && worksheet.Name != "UserInRoles" && worksheet.Name != "Fields" && worksheet.Name != "UserInFields" && worksheet.Name != "Settings")
                         {
-                            var lc = SheetWithRulesDS.GenerateLifeCycleForSheetWithRulesDS<StatesConfiguration>(worksheet, StatesSheetList, UserInFieldsSheetList, UserInRolesSheetList);
+                            var lc = SheetWithRulesDS.GenerateLifeCycleForSheetWithRulesDS<StatesConfiguration>(worksheet, statesSheetList, userInFieldsSheetList, UserInRolesSheetList);
                             DSSerializer.StartDSSerializer(pathToFolderWithLCFiles + "\\" + worksheet.Name, lc);
                         }
                     }

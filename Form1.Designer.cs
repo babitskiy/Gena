@@ -35,12 +35,13 @@
             this.richTextBox_Logs = new System.Windows.Forms.RichTextBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.label1 = new System.Windows.Forms.Label();
+            this.inSingleLineDSO = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // btnChooseExcelFile
             // 
             this.btnChooseExcelFile.Location = new System.Drawing.Point(7, 6);
-            this.btnChooseExcelFile.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnChooseExcelFile.Margin = new System.Windows.Forms.Padding(2);
             this.btnChooseExcelFile.Name = "btnChooseExcelFile";
             this.btnChooseExcelFile.Size = new System.Drawing.Size(117, 20);
             this.btnChooseExcelFile.TabIndex = 0;
@@ -51,7 +52,7 @@
             // btnStartGeneration
             // 
             this.btnStartGeneration.Location = new System.Drawing.Point(511, 338);
-            this.btnStartGeneration.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnStartGeneration.Margin = new System.Windows.Forms.Padding(2);
             this.btnStartGeneration.Name = "btnStartGeneration";
             this.btnStartGeneration.Size = new System.Drawing.Size(117, 20);
             this.btnStartGeneration.TabIndex = 1;
@@ -63,7 +64,7 @@
             // 
             this.radioButton_DS.AutoSize = true;
             this.radioButton_DS.Location = new System.Drawing.Point(7, 29);
-            this.radioButton_DS.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.radioButton_DS.Margin = new System.Windows.Forms.Padding(2);
             this.radioButton_DS.Name = "radioButton_DS";
             this.radioButton_DS.Size = new System.Drawing.Size(39, 19);
             this.radioButton_DS.TabIndex = 2;
@@ -76,7 +77,7 @@
             // 
             this.radioButton_DSO.AutoSize = true;
             this.radioButton_DSO.Location = new System.Drawing.Point(7, 49);
-            this.radioButton_DSO.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.radioButton_DSO.Margin = new System.Windows.Forms.Padding(2);
             this.radioButton_DSO.Name = "radioButton_DSO";
             this.radioButton_DSO.Size = new System.Drawing.Size(48, 19);
             this.radioButton_DSO.TabIndex = 3;
@@ -88,7 +89,7 @@
             // richTextBox_Logs
             // 
             this.richTextBox_Logs.Location = new System.Drawing.Point(15, 86);
-            this.richTextBox_Logs.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.richTextBox_Logs.Margin = new System.Windows.Forms.Padding(2);
             this.richTextBox_Logs.Name = "richTextBox_Logs";
             this.richTextBox_Logs.ReadOnly = true;
             this.richTextBox_Logs.Size = new System.Drawing.Size(604, 240);
@@ -107,16 +108,29 @@
             this.label1.Location = new System.Drawing.Point(5, 68);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 15);
+            this.label1.Size = new System.Drawing.Size(97, 15);
             this.label1.TabIndex = 5;
-            this.label1.Text = "label1";
+            this.label1.Text = "Файл не выбран";
             this.label1.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // inSingleLineDSO
+            // 
+            this.inSingleLineDSO.AutoSize = true;
+            this.inSingleLineDSO.Location = new System.Drawing.Point(60, 49);
+            this.inSingleLineDSO.Name = "inSingleLineDSO";
+            this.inSingleLineDSO.Size = new System.Drawing.Size(102, 19);
+            this.inSingleLineDSO.TabIndex = 6;
+            this.inSingleLineDSO.Text = "В одну строку";
+            this.inSingleLineDSO.UseVisualStyleBackColor = true;
+            this.inSingleLineDSO.Visible = false;
+            this.inSingleLineDSO.CheckedChanged += new System.EventHandler(this.checkBox_inSingleLineDSO_CheckedChanged);
             // 
             // Gena
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(634, 364);
+            this.Controls.Add(this.inSingleLineDSO);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.richTextBox_Logs);
             this.Controls.Add(this.radioButton_DSO);
@@ -124,12 +138,11 @@
             this.Controls.Add(this.btnStartGeneration);
             this.Controls.Add(this.btnChooseExcelFile);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.Name = "Gena";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Gena - 1.0.0";
-            this.Load += new System.EventHandler(this.Gena_Load);
+            this.Text = "Gena - генератор жц";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -143,6 +156,7 @@
         private RadioButton radioButton_DSO;
         private OpenFileDialog openFileDialog1;
         private Label label1;
-        public RichTextBox richTextBox_Logs;
+        private RichTextBox richTextBox_Logs;
+        private CheckBox inSingleLineDSO;
     }
 }

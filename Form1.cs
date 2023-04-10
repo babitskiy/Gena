@@ -1,23 +1,28 @@
-using ClosedXML.Excel;
-using System.Windows.Forms;
+using Gena.Exceptions;
+using Gena.Extensions;
 
 namespace Gena
 {
     public partial class Gena : Form
     {
-        bool f_open; //определяют выбор файла
         bool canStart = false; //определяет можно ли запускать генерацию
+        bool _inSingleLine = false; //при выборе данного чекбокса жц будет сериализован в одну строку
         string? systemType = null; //определяет тип системы DS/DSO
 
         public Gena()
         {
             InitializeComponent();
         }
-
-        public void addLog(string log) 
+        private void addFromNewLine(string msg, Color color)
         {
             richTextBox_Logs.AppendText("\r\n");
-            richTextBox_Logs.AppendText(log);
+            richTextBox_Logs.AppendText(msg, color);
+        }
+
+        private void addFromNewLine(string msg)
+        {
+            richTextBox_Logs.AppendText("\r\n");
+            richTextBox_Logs.AppendText(msg);
         }
 
         private void btnChooseExcelFile_Click(object sender, EventArgs e)
@@ -33,111 +38,80 @@ namespace Gena
                 //Вывести имя файла на форме в компоненте label1
                 label1.Text = openFileDialog1.FileName;
 
-                richTextBox_Logs.AppendText("\r\n");
-                richTextBox_Logs.AppendText(@"Выбран файл " + fileName);
-
-                //Установить флажок f_open
-                f_open = true;
+                addFromNewLine(@"Выбран файл " + fileName);
 
                 if (fileExtension == ".xlsx" || fileExtension == ".xls")
-                {
                     canStart = true;
-                }
                 else
-                {
-                    richTextBox_Logs.AppendText("\r\n");
-                    richTextBox_Logs.AppendText(@"Нужно выбрать excel-файл с расширением .xls или .xlsx");
-                }
-                // 7. Закрыть соединение с файлом
+                    addFromNewLine(@"Нужно выбрать excel-файл с расширением .xls или .xlsx", Color.Yellow);
+                
+                //Закрыть соединение с файлом (нужно?)
                 //sr.Close();
             }
         }
+
 
         private void btnStartGeneration_Click(object sender, EventArgs e)
         {
             if(canStart)
             {
-                //Получаем инфу о директории в которой находится эксель-файл
-                DirectoryInfo directoryInfo = new DirectoryInfo(openFileDialog1.FileName);
-                var fileExtension = Path.GetExtension(openFileDialog1.FileName);
-                var fileName = Path.GetFileName(openFileDialog1.FileName);
-                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(openFileDialog1.FileName);
-                var parentFolder = directoryInfo.Parent;
-
                 if(systemType != null)
                 {
-                    if (systemType == "DS")
-                    {
-                        var pathToFolderWithXMLFiles = parentFolder + "\\" + fileNameWithoutExtension;
-                        Directory.CreateDirectory(pathToFolderWithXMLFiles);
-                        richTextBox_Logs.AppendText("\r\n");
-                        richTextBox_Logs.AppendText(@"Создана папка " + fileName);
+                    //Получаем инфу о директории в которой находится эксель-файл
+                    DirectoryInfo directoryInfo = new DirectoryInfo(openFileDialog1.FileName);
+                    var fileExtension = Path.GetExtension(openFileDialog1.FileName);
+                    var fileName = Path.GetFileName(openFileDialog1.FileName);
+                    var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(openFileDialog1.FileName);
+                    var parentFolder = directoryInfo.Parent;
 
-                        if (LifeCycleGenerator.GenerateLifeCycle(openFileDialog1.FileName, pathToFolderWithXMLFiles, systemType))
+                    var pathToFolderWithLCFiles = parentFolder + "\\" + fileNameWithoutExtension;
+                    Directory.CreateDirectory(pathToFolderWithLCFiles);
+                    addFromNewLine(@"Создана папка " + fileNameWithoutExtension, Color.Green);
+
+                    try
+                    {
+                        if (LifeCycleGenerator.GenerateLifeCycle(openFileDialog1.FileName, pathToFolderWithLCFiles, systemType, _inSingleLine))
                         {
-                            richTextBox_Logs.AppendText("\r\n");
-                            richTextBox_Logs.AppendText(@"Жц сгенерирован успешно");
+                            addFromNewLine(@"Жц сгенерирован успешно", Color.Green);
                         }
                         else
-                        {
-                            richTextBox_Logs.AppendText("\r\n");
-                            richTextBox_Logs.AppendText(@"Что-то пошло не так");
-                        }
+                            addFromNewLine(@"Что-то пошло не так, обратитесь к разработчику", Color.Red);
                     }
-                    else if (systemType == "DSO")
+                    catch (UniversalException ex)
                     {
-                        var pathToFolderWithJSONFiles = parentFolder + "\\" +fileNameWithoutExtension;
-                        Directory.CreateDirectory(pathToFolderWithJSONFiles);
-                        richTextBox_Logs.AppendText("\r\n");
-                        richTextBox_Logs.AppendText(@"Создана папка " + fileName);
-
-                        if(LifeCycleGenerator.GenerateLifeCycle(openFileDialog1.FileName, pathToFolderWithJSONFiles, systemType))
-                        {
-                            richTextBox_Logs.AppendText("\r\n");
-                            richTextBox_Logs.AppendText(@"Жц сгенерирован успешно");
-                        }
-                        else
-                        {
-                            richTextBox_Logs.AppendText("\r\n");
-                            richTextBox_Logs.AppendText(@"Что-то пошло не так");
-                        }
+                        addFromNewLine(ex.Message, Color.Red);
+                        return;
+                    }
+                    catch (Exception)
+                    {
+                        addFromNewLine(@"Что-то пошло не так, обратитесь к разработчику", Color.Red);
+                        throw;
                     }
                 }
                 else
                 {
-                    richTextBox_Logs.AppendText("\r\n");
-                    richTextBox_Logs.AppendText(@"Вы не выбрали тип системы (DS/DSO)");
+                    addFromNewLine(@"Вы не выбрали тип системы (DS/DSO)", Color.Yellow);
                 }
             }
             else
             {
-                richTextBox_Logs.AppendText("\r\n");
-                richTextBox_Logs.AppendText(@"Не все правила запуска генерации соблюдены!");
+                addFromNewLine(@"Не все правила запуска генерации соблюдены!", Color.Yellow);
             }
         }
 
         private void radioButton_DS_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButton_DS.Checked)
-            {
-                systemType = "DS";
-            }
-            else
-            {
-                systemType = null;
-            }
+            //при выборе радио-кнопки DS, записываем DS в переменную
+            systemType = radioButton_DS.Checked ? "DS" : null;
         }
 
         private void radioButton_DSO_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButton_DSO.Checked)
-            {
-                systemType = "DSO";
-            }
-            else
-            {
-                systemType = null;
-            }
+            //при выборе радио-кнопки DSO, записываем DSO в переменную
+            systemType = radioButton_DSO.Checked ? "DSO" : null;
+
+            //если выбран DSO, то будет отображаться чекбокс "В одну строку"
+            inSingleLineDSO.Visible = radioButton_DSO.Checked;
         }
 
         private void richTextBox_Logs_TextChanged(object sender, EventArgs e)
@@ -148,6 +122,16 @@ namespace Gena
         private void label1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void Gena_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox_inSingleLineDSO_CheckedChanged(object sender, EventArgs e)
+        {
+            _inSingleLine = inSingleLineDSO.Checked;
         }
 
         private void Gena_Load(object sender, EventArgs e)
