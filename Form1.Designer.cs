@@ -142,7 +142,7 @@
             this.MaximizeBox = false;
             this.Name = "Gena";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Gena - генератор жц";
+            this.Text = "Gena - 1.0.2";
             this.ResumeLayout(false);
             this.PerformLayout();
 

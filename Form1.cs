@@ -133,10 +133,5 @@ namespace Gena
         {
             _inSingleLine = inSingleLineDSO.Checked;
         }
-
-        private void Gena_Load(object sender, EventArgs e)
-        {
-
-        }
     }
 }
